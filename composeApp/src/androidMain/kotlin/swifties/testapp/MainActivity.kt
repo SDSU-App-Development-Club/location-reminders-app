@@ -13,7 +13,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            // todo wrap in a theme
             MaterialTheme {
                 App()
             }
