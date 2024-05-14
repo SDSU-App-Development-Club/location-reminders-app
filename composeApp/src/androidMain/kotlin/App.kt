@@ -27,6 +27,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.Marker
+import com.google.maps.android.compose.MarkerState
+import com.google.maps.android.compose.rememberCameraPositionState
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -56,6 +62,9 @@ fun App(
                 onLoginClick = { navController.navigate(MenuScreen.Login.name) },
                 onRegisterClick = { navController.navigate(MenuScreen.CreateAccount.name) }
             )
+        }
+        composable(route = MenuScreen.Login.name) {
+            Text("hi")
         }
         composable(route = MenuScreen.CreateAccount.name) {
             CreateAccountScreen()
@@ -99,7 +108,23 @@ private inline fun CenteredColumn(modifier: Modifier = Modifier, content: @Compo
 @Composable
 @Preview
 fun CreateAccountScreen() {
-    CenteredColumn {
-        Text("Create Account")
+    CenteredColumn(modifier = Modifier.width(100.dp).height(100.dp)) {
+        // code from
+        // https://developers.google.com/maps/documentation/android-sdk/maps-compose
+        val sdsu = LatLng(32.774799, -117.071869)
+        val cameraPositionState = rememberCameraPositionState {
+            position = CameraPosition.fromLatLngZoom(sdsu, 10f)
+        }
+
+        GoogleMap(
+            modifier = Modifier.fillMaxSize(),
+            cameraPositionState = cameraPositionState
+        ) {
+            Marker(
+                state = MarkerState(position = sdsu),
+                title = "SDSU",
+                snippet = "Marker in Singapore"
+            )
+        }
     }
 }
