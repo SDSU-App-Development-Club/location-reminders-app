@@ -20,7 +20,7 @@ dependencies {
     implementation("io.ktor:ktor-server-default-headers:$ktor")
     implementation("io.ktor:ktor-server-content-negotiation:$ktor")
     implementation("io.ktor:ktor-server-status-pages:$ktor")
-    implementation(project(":composeApp"))
+    //implementation(project(":composeApp"))
     testImplementation(libs.ktor.server.tests)
     testImplementation(libs.kotlin.test.junit)
     implementation("io.github.cdimascio:dotenv-kotlin:6.3.1")
