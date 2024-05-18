@@ -4,7 +4,10 @@ plugins {
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.googleAndroidLibrariesMapsplatformSecretsGradlePlugin)
 }
-
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
 kotlin {
     androidTarget {
         compilations.all {

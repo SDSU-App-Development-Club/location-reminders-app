@@ -1,14 +1,10 @@
-ktor {
-    deployment {
-        port = 8080
-    }
-    application {
-        modules = [ com.example.ApplicationKt.module ]
-    }
-}
-
-database:
-    url: ${DB_URL}
-    driver: org.postgresql.Driver
-    user: ${DB_USER}
-    password: ${DB_PASSWORD}
+ktor:
+    deployment:
+        port: 8080
+    application:
+        modules:
+            - club.awesome.ApplicationKt.module
+db:
+    url: postgres://postgres.yavstzicdcjbqsvnfhxy:>rmXk2b>NY7J=;V@aws-0-us-west-1.pooler.supabase.com:5432/postgres
+    email: "ccobb4974@sdsu.edu"
+    pass: ">rmXk2b>NY7J=;V"
