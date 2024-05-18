@@ -1,21 +1,27 @@
 package swifties.testapp
 
 import Greeting
-import SERVER_PORT
+import io.ktor.serialization.jackson.jackson
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
+import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.server.request.receive
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.transactions.transaction
+import swifties.testapp.LocationAlerts.locationName
 
 fun main() {
     embeddedServer(Netty, port = 8080) {
         install(ContentNegotiation) {
-            gson {
-                setPrettyPrinting()
-            }
+            jackson()
         }
-        Database.connect("jdbc:postgresql://your-supabase-url:5432/postgres", driver = "org.postgresql.Driver", user = "your-supabase-user", password = "your-supabase-password")
+        Database.connect("postgresql://localhost:5432/postgres", driver = "org.postgresql.Driver", user = "root", password = "password")
+
+
         routing {
             route("/alerts") {
                 post("/create") {
@@ -28,7 +34,6 @@ fun main() {
                             it[radius] = alert.radius
                             it[message] = alert.message
                             it[active] = alert.active
-                            it[createdAt] = DateTime.now()
                         }
                     }
                     call.respond("Alert created successfully")
