@@ -1,6 +1,8 @@
+# If on windows, make sure to run with WSL and NOT the windows command line
 version: '3.1'
 services:
   postgres_db:
+    # Alpine image is nearly 50% smaller than Ubuntu
     image: postgres:alpine
     volumes:
       - db-data:/var/lib/postgresql/data
@@ -10,3 +12,7 @@ services:
       POSTGRES_DB: alerts
       POSTGRES_USER: root
       POSTGRES_PASSWORD: password
+
+# Database will persist after `docker-compose down`
+volumes:
+  db-data:

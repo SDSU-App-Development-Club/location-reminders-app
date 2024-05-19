@@ -1,7 +1,7 @@
 package swifties.testapp
 
 data class LocationAlert(
-        val alertId: Int? = null,
+        val alertId: Int,
         val locationName: String,
         val latitude: Double,
         val longitude: Double,
