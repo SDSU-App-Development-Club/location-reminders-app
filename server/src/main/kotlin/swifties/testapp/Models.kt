@@ -4,12 +4,12 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class LocationAlert(
-        val alertId: Int,
-        val locationName: String,
+        val alert_id: Int,
+        val location_name: String,
         val latitude: Double,
         val longitude: Double,
         val radius: Int,
         val message: String,
         val active: Boolean = true,
-        val createdAt: String? = null
+        val created_at: String? = null
 )

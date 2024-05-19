@@ -2,7 +2,6 @@ package swifties.testapp
 
 import Greeting
 import io.github.cdimascio.dotenv.Dotenv
-import io.github.cdimascio.dotenv.dotenv
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.postgrest.Postgrest
@@ -15,18 +14,13 @@ import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.server.request.receive
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import org.jetbrains.exposed.sql.Column
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.deleteWhere
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.jetbrains.exposed.sql.update
 import org.slf4j.LoggerFactory
 import io.ktor.client.*
 import io.ktor.client.engine.java.*
+import javax.management.Query.eq
 
 
 val logger = LoggerFactory.getLogger("pingas")
@@ -73,25 +67,18 @@ fun main() {
                         call.respond("Invalid alert ID")
                         return@get
                     }
-                    val alert = transaction {
-                        AlertsTable.selectAll().where { AlertsTable.id eq id }.map {
-                            LocationAlert(
-                                alertId = it[AlertsTable.id].value,
-                                locationName = it[AlertsTable.locationName],
-                                latitude = it[AlertsTable.latitude],
-                                longitude = it[AlertsTable.longitude],
-                                radius = it[AlertsTable.radius],
-                                message = it[AlertsTable.message],
-                                active = it[AlertsTable.active],
-                                createdAt = it[AlertsTable.createdAt].toString()
-                            )
-                        }.singleOrNull()
+                    val alert = supabase.from("location_alerts").select() {
+                        filter {
+                            LocationAlert::alert_id eq id
+                        }
                     }
-                    if (alert == null) {
+
+                    if (alert.equals(null)) {
                         call.respond("Alert not found")
                     } else {
                         call.respond(alert)
                     }
+
                 }
 
                 put("/{id}") {
@@ -101,16 +88,7 @@ fun main() {
                         return@put
                     }
                     val alert = call.receive<LocationAlert>()
-                    transaction {
-                        AlertsTable.update({ AlertsTable.id eq id }) {
-                            it[locationName] = alert.locationName
-                            it[latitude] = alert.latitude
-                            it[longitude] = alert.longitude
-                            it[radius] = alert.radius
-                            it[message] = alert.message
-                            it[active] = alert.active
-                        }
-                    }
+
                     call.respond("Alert updated successfully")
                 }
 
@@ -120,9 +98,7 @@ fun main() {
                         call.respond("Invalid alert ID")
                         return@delete
                     }
-                    transaction {
-                        AlertsTable.deleteWhere { AlertsTable.id eq id }
-                    }
+
                     call.respond("Alert deleted successfully")
                 }
             }
