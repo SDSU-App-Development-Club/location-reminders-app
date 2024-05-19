@@ -1,5 +1,8 @@
 package swifties.testapp
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class LocationAlert(
         val alertId: Int,
         val locationName: String,

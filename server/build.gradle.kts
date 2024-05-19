@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.kotlinJvm)
     alias(libs.plugins.ktor)
+    kotlin("plugin.serialization")
     application
 }
 
@@ -21,6 +22,9 @@ dependencies {
     testImplementation(libs.ktor.server.tests)
     testImplementation(libs.kotlin.test.junit)
     implementation("io.github.cdimascio:dotenv-kotlin:6.3.1")
+    implementation(platform("io.github.jan-tennert.supabase:bom:2.4.1"))
+    implementation("io.github.jan-tennert.supabase:postgrest-kt")
+    implementation("io.ktor:ktor-client-java:$ktor")
     implementation(libs.kotlin.reflect)
     implementation(libs.postgresql)
     implementation(libs.exposed.core)
