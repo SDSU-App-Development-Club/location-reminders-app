@@ -11,8 +11,6 @@ application {
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=${extra["development"] ?: "false"}")
 }
 
-java.toolchain.languageVersion.set(JavaLanguageVersion.of(8))
-
 dependencies {
     implementation(projects.shared)
     implementation(libs.logback)
