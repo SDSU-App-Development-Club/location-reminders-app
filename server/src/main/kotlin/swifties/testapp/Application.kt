@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory
 import io.ktor.client.*
 import io.ktor.client.engine.java.*
 import javax.management.Query.eq
+import javax.xml.stream.Location
 
 
 val logger = LoggerFactory.getLogger("pingas")
@@ -41,8 +42,7 @@ fun main() {
                 install(Postgrest)
             }
             logger.info("Connected to Supabase")
-        }
-        catch(e: Exception) {
+        } catch (e: Exception) {
             logger.info("Cannot connect to Supabase", e)
             throw e
         }
@@ -56,50 +56,69 @@ fun main() {
         routing {
             route("/alerts") {
                 post("/create") {
-                    val alert = call.receive<LocationAlert>()
-                    supabase.from("location_alerts").insert(alert)
-                    call.respond("Alert created successfully")
+                    try {
+                        val alert = call.receive<LocationAlert>()
+                        supabase.from("location_alerts").insert(alert)
+                        call.respond("Alert created successfully")
+                    } catch (e: Exception) {
+                        logger.info("Cannot create alert: $e")
+                    }
                 }
 
-                get("/{id}") {
+                get("/get-alert/{id}") {
                     val id = call.parameters["id"]?.toIntOrNull()
                     if (id == null) {
                         call.respond("Invalid alert ID")
                         return@get
                     }
-                    val alert = supabase.from("location_alerts").select() {
-                        filter {
-                            LocationAlert::alert_id eq id
+                    try {
+                        val alert = supabase.from("location_alerts").select() {
+                            filter {
+                                LocationAlert::alert_id eq id
+                            }
                         }
+                        if (alert.equals(null)) {
+                            call.respond("Alert not found")
+                        } else {
+                            call.respond(alert)
+                        }
+                    } catch (e: Exception) {
+                        logger.info("Cannot fetch alert: $e")
                     }
-
-                    if (alert.equals(null)) {
-                        call.respond("Alert not found")
-                    } else {
-                        call.respond(alert)
-                    }
-
                 }
 
-                put("/{id}") {
+                put("/update-alert/{id}") {
                     val id = call.parameters["id"]?.toIntOrNull()
                     if (id == null) {
                         call.respond("Invalid alert ID")
                         return@put
                     }
-                    val alert = call.receive<LocationAlert>()
-
-                    call.respond("Alert updated successfully")
+                    try {
+                        val alert = call.receive<LocationAlert>()
+                        supabase.from("location_alerts").update(alert)
+                        call.respond("Alert updated successfully")
+                    } catch (e: Exception) {
+                        logger.info("Cannot update alert: $e")
+                    }
                 }
 
-                delete("/{id}") {
+                delete("/delete-alert/{id}") {
                     val id = call.parameters["id"]?.toIntOrNull()
                     if (id == null) {
                         call.respond("Invalid alert ID")
                         return@delete
                     }
 
-                    call.respond("Alert deleted successfully")
+                    try {
+                        supabase.from("location_alerts").delete {
+                            filter {
+                                LocationAlert::alert_id eq id
+                            }
+                        }
+                        call.respond("Alert deleted successfully")
+                    } catch (e: Exception) {
+                        logger.info("Failed to delete alert: $e")
+                    }
                 }
             }
         }
