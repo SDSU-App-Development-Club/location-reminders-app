@@ -4,7 +4,7 @@ import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.kotlin.datetime.CurrentDateTime
 import org.jetbrains.exposed.sql.kotlin.datetime.datetime
 
-object LocationAlerts : IntIdTable(columnName = "alert_id") {
+object AlertsTable : IntIdTable(name = "alerts", columnName = "alert_id") {
     val locationName = varchar("location_name", 255)
     val latitude = double("latitude")
     val longitude = double("longitude")
