@@ -18,13 +18,18 @@ dependencies {
     implementation(libs.ktor.server.netty)
     implementation(libs.ktor.server.content.negotiation)
     implementation(libs.ktor.serialization.jackson)
-    testImplementation(libs.ktor.server.tests)
-    testImplementation(libs.kotlin.test.junit)
-    implementation("io.github.cdimascio:dotenv-kotlin:6.3.1")
+    implementation(libs.dotenv.kotlin)
     implementation(libs.kotlin.reflect)
     implementation(libs.postgresql)
     implementation(libs.exposed.core)
     implementation(libs.exposed.dao)
     implementation(libs.exposed.jdbc)
     implementation(libs.exposed.kotlin.datetime)
+
+    testImplementation(libs.ktor.server.tests)
+    testImplementation(libs.kotlin.test.junit)
+}
+
+tasks.withType<Test>().configureEach {
+    useJUnitPlatform()
 }
