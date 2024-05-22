@@ -1,6 +1,5 @@
 package swifties.testapp
 
-import Greeting
 import io.ktor.serialization.jackson.jackson
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
@@ -9,7 +8,6 @@ import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.server.request.receive
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
@@ -26,7 +24,7 @@ fun main() {
         }
 
         // just for testing, points to a local docker instance
-        Database.connect("jdbc:postgresql://127.0.0.1:5432/alerts", driver = "org.postgresql.Driver", user = "root", password = "password")
+        Database.connect("jdbc:postgresql://127.0.0.1:5432/alerts", driver = "org.postgresql.Driver", user = System.getenv("PG_USER"), password = System.getenv("PG_PASSWORD"))
 
         // make the table in Postgres
         transaction {
@@ -39,7 +37,6 @@ fun main() {
                     val alert = call.receive<LocationAlert>()
                     transaction {
                         AlertsTable.insert {
-                            it[id] = alert.alertId
                             it[locationName] = alert.locationName
                             it[latitude] = alert.latitude
                             it[longitude] = alert.longitude
@@ -60,14 +57,14 @@ fun main() {
                     val alert = transaction {
                         AlertsTable.selectAll().where { AlertsTable.id eq id }.map {
                             LocationAlert(
-                                    alertId = it[AlertsTable.id].value,
-                                    locationName = it[AlertsTable.locationName],
-                                    latitude = it[AlertsTable.latitude],
-                                    longitude = it[AlertsTable.longitude],
-                                    radius = it[AlertsTable.radius],
-                                    message = it[AlertsTable.message],
-                                    active = it[AlertsTable.active],
-                                    createdAt = it[AlertsTable.createdAt].toString()
+                                alertId = it[AlertsTable.id].value,
+                                locationName = it[AlertsTable.locationName],
+                                latitude = it[AlertsTable.latitude],
+                                longitude = it[AlertsTable.longitude],
+                                radius = it[AlertsTable.radius],
+                                message = it[AlertsTable.message],
+                                active = it[AlertsTable.active],
+                                createdAt = it[AlertsTable.createdAt].toString()
                             )
                         }.singleOrNull()
                     }
@@ -112,12 +109,4 @@ fun main() {
             }
         }
     }.start(wait = true)
-}
-
-fun Application.module() {
-    routing {
-        get("/") {
-            call.respondText("Ktor: ${Greeting().greet()}")
-        }
-    }
 }
