@@ -1,35 +1,52 @@
 plugins {
-    alias(libs.plugins.kotlinJvm)
-    alias(libs.plugins.ktor)
     application
+    java
+    id("org.springframework.boot") version "3.2.5"
+    id("io.spring.dependency-management") version "1.1.4"
+    idea
 }
 
 group = "swifties.testapp"
 version = "1.0.0"
+
 application {
     mainClass.set("swifties.testapp.ApplicationKt")
-    applicationDefaultJvmArgs = listOf("-Dio.ktor.development=${extra["development"] ?: "false"}")
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+}
+
+repositories {
+    mavenCentral()
 }
 
 dependencies {
-    implementation(projects.shared)
-    implementation(libs.logback)
-    implementation(libs.ktor.server.core)
-    implementation(libs.ktor.server.netty)
-    implementation(libs.ktor.server.content.negotiation)
-    implementation(libs.ktor.serialization.jackson)
-    implementation(libs.dotenv.kotlin)
-    implementation(libs.kotlin.reflect)
-    implementation(libs.postgresql)
-    implementation(libs.exposed.core)
-    implementation(libs.exposed.dao)
-    implementation(libs.exposed.jdbc)
-    implementation(libs.exposed.kotlin.datetime)
+    implementation(libs.spring.boot.starter.jdbc)
+    implementation(libs.spring.boot.starter.web)
+    //implementation(libs.spring.boot.starter.security)
+    implementation(libs.spring.boot.starter.data.jpa)
 
-    testImplementation(libs.ktor.server.tests)
-    testImplementation(libs.kotlin.test.junit)
+    runtimeOnly(libs.postgresql)
+
+    compileOnly(libs.lombok)
+    annotationProcessor(libs.lombok)
+
+    testImplementation(libs.spring.boot.starter.test)
+    testRuntimeOnly(libs.junit.platform.launcher)
+    testImplementation(libs.spring.security.test)
+
+    testCompileOnly(libs.lombok)
+    testAnnotationProcessor(libs.lombok)
 }
 
-tasks.withType<Test>().configureEach {
+tasks.withType<Test> {
     useJUnitPlatform()
+}
+
+idea {
+    module {
+        isDownloadSources = true
+        isDownloadJavadoc = true
+    }
 }
