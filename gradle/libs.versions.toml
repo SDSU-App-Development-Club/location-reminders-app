@@ -19,6 +19,8 @@ ktor = "2.3.10"
 logback = "1.5.5"
 navigationCompose = "2.7.7"
 postgresql = "42.2.20"
+uiTextGoogleFonts = "1.6.7"
+playServicesWallet = "19.3.0"
 
 [libraries]
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
@@ -46,6 +48,8 @@ spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-start
 spring-boot-starter-data-jpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa" }
 spring-security-test = { module = "org.springframework.security:spring-security-test" }
 lombok = { module = "org.projectlombok:lombok" }
+androidx-ui-text-google-fonts = { group = "androidx.compose.ui", name = "ui-text-google-fonts", version.ref = "uiTextGoogleFonts" }
+play-services-wallet = { group = "com.google.android.gms", name = "play-services-wallet", version.ref = "playServicesWallet" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

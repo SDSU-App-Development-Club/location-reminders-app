@@ -28,6 +28,8 @@ kotlin {
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
             implementation(projects.shared)
+            implementation("androidx.compose.ui:ui-text-google-fonts:1.6.7")
+
         }
     }
 }
@@ -70,5 +72,9 @@ android {
     dependencies {
         debugImplementation(libs.compose.ui.tooling)
     }
+}
+dependencies {
+    implementation(libs.androidx.ui.text.google.fonts)
+    implementation(libs.play.services.wallet)
 }
 
