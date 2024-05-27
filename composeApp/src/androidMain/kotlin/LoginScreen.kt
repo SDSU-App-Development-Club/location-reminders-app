@@ -1,5 +1,4 @@
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,26 +17,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import swifties.testapp.R
 
 @Composable
-fun GradientImageView(modifier: Modifier = Modifier) {
-    Image(
-        painter = painterResource(id = R.drawable.welcome_page), // Replace with your image resource
-        contentDescription = null,
-        contentScale = ContentScale.Crop, // Scale the image to fill the size
-        modifier = modifier.fillMaxSize()
-    )
-}
-
-@Composable
-fun SignUpScreen() {
+fun LogInScreen() {
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
