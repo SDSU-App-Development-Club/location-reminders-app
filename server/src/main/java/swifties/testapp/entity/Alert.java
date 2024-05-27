@@ -14,6 +14,7 @@ import java.sql.Timestamp;
 @Entity
 @Table(name = "alerts", schema = "public")
 public class Alert {
+    // Should we add JsonProperty???
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "alert_id")

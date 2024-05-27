@@ -24,9 +24,11 @@ repositories {
 dependencies {
     implementation(libs.spring.boot.starter.jdbc)
     implementation(libs.spring.boot.starter.web)
-    //implementation(libs.spring.boot.starter.security)
+    implementation(libs.spring.boot.starter.security)
     implementation(libs.spring.boot.starter.data.jpa)
-
+    implementation(libs.jjwt.api)
+    implementation(libs.jjwt.impl)
+    implementation(libs.jjwt.jackson)
     runtimeOnly(libs.postgresql)
 
     compileOnly(libs.lombok)
