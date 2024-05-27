@@ -13,6 +13,7 @@ androidx-test-junit = "1.1.5"
 compose = "1.6.5"
 compose-plugin = "1.6.2"
 dotenvKotlin = "6.3.1"
+jjwtApi = "0.11.5"
 junit = "4.13.2"
 kotlin = "1.9.23"
 ktor = "2.3.10"
@@ -25,6 +26,9 @@ playServicesWallet = "19.3.0"
 [libraries]
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 dotenv-kotlin = { module = "io.github.cdimascio:dotenv-kotlin", version.ref = "dotenvKotlin" }
+jjwt-api = { module = "io.jsonwebtoken:jjwt-api", version.ref = "jjwtApi" }
+jjwt-impl = { module = "io.jsonwebtoken:jjwt-impl", version.ref = "jjwtApi" }
+jjwt-jackson = { module = "io.jsonwebtoken:jjwt-jackson", version.ref = "jjwtApi" }
 junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }

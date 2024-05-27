@@ -76,5 +76,8 @@ android {
 dependencies {
     implementation(libs.androidx.ui.text.google.fonts)
     implementation(libs.play.services.wallet)
+    implementation(libs.jjwt.api)
+    implementation(libs.jjwt.impl)
+    implementation(libs.jjwt.jackson)
 }
 
