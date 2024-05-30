@@ -30,7 +30,7 @@ public class AuthenticationService {
     public User signup(RegisterUserDto input) {
         User user = new User()
                 .setEmail(input.getEmail())
-                .setPassword(passwordEncoder.encode(input.getPassword()));
+                .setPasswordHash(passwordEncoder.encode(input.getPassword()));
 
         return userRepository.save(user);
     }
