@@ -10,7 +10,7 @@ group = "swifties.testapp"
 version = "1.0.0"
 
 application {
-    mainClass.set("swifties.testapp.ApplicationKt")
+    mainClass.set("swifties.testapp.TestAppApplication")
 }
 
 java {
