@@ -2,9 +2,7 @@ package swifties.testapp.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -48,6 +46,16 @@ public class User implements UserDetails {
     @Override
     public String getUsername() {
         return email;
+    }
+
+    public User setPassword(String password) {
+        this.passwordHash = password;
+        return this;
+    }
+
+    public User setEmail(String username) {
+        this.email = username;
+        return this;
     }
 
     @Override
