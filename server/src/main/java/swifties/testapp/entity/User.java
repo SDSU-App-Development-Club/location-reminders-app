@@ -3,6 +3,8 @@ package swifties.testapp.entity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.Accessors;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -10,6 +12,7 @@ import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.List;
 
+@Accessors(chain = true)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -29,7 +32,7 @@ public class User implements UserDetails {
     @Column(name = "password_hash", nullable = false)
     private String passwordHash;
 
-    @JsonProperty("created_at")
+    @CreationTimestamp
     @Column(name = "created_at")
     private Timestamp createdAt;
 
@@ -46,16 +49,6 @@ public class User implements UserDetails {
     @Override
     public String getUsername() {
         return email;
-    }
-
-    public User setPassword(String password) {
-        this.passwordHash = password;
-        return this;
-    }
-
-    public User setEmail(String username) {
-        this.email = username;
-        return this;
     }
 
     @Override
