@@ -22,9 +22,14 @@ test ! -z "$JWT_SECRET_KEY" && echo " - JWT_SECRET_KEY set to '$JWT_SECRET_KEY'"
 
 
 
+# Check for docker
 echo "Checking for docker command..."
 command -v docker &> /dev/null || (echo "Docker engine not installed!" && exit)
 echo "Found docker command"
+# Check for psql
+echo "Checking for psql command..."
+command -v psql &> /dev/null || (echo "PostgreSQL not installed! Could not find psql in PATH: \n $PATH" && exit)
+echo "Found psql command"
 
 # Boot up for the first time...
 echo "Loading Postgres"
