@@ -14,11 +14,11 @@ kotlin {
     }
     
     sourceSets {
-        
         androidMain.dependencies {
             implementation(libs.compose.ui.tooling.preview)
             implementation(libs.androidx.activity.compose)
             implementation(libs.androidx.navigation.compose)
+            implementation(libs.androidx.ui.text.google.fonts)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -28,8 +28,6 @@ kotlin {
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
             implementation(projects.shared)
-            implementation("androidx.compose.ui:ui-text-google-fonts:1.6.7")
-
         }
     }
 }
