@@ -25,7 +25,7 @@ object RestAPIAccess {
         data class SignupDto(val username: String, val password: String)
 
         // TODO: Fix the Spring backend to use TLS
-        httpClient.post("https://10.0.0.18:8080/auth/signup") {
+        httpClient.post("http://10.0.2.2:8080/auth/signup") {
             contentType(ContentType.Application.Json)
             setBody(SignupDto(username, password))
         }

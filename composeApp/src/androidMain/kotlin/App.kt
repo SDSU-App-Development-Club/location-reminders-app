@@ -16,21 +16,22 @@ fun App(
     navController: NavHostController = rememberNavController()
 ) {
     SignUpScreen()
-    /*NavHost(
-        navController = navController,
-        startDestination = MenuScreen.LoginOrRegister.name,
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-    ) {
-        *//*composable(route = MenuScreen.LoginOrRegister.name) {
-            LoginRegisterScreen(
-                onLoginClick = { navController.navigate(MenuScreen.Login.name) },
-                onRegisterClick = { navController.navigate(MenuScreen.CreateAccount.name) }
-            )
-        }*//*
-        composable(route = MenuScreen.CreateAccount.name) {
-
-        }
-    }*/
+//    NavHost(
+//        navController = navController,
+//        startDestination = MenuScreen.SignUpScreen.name,
+//        modifier = Modifier
+//            .fillMaxSize()
+//            .verticalScroll(rememberScrollState())
+//    ) {
+//        composable(route = MenuScreen.SignUpScreen.name) {
+//            StartOrderScreen(
+//                quantityOptions = DataSource.quantityOptions,
+//                modifier = Modifier
+//                    .fillMaxSize()
+//                    .padding(dimensionResource(R.dimen.padding_medium))
+//            )
+//
+//        }
+//
+//    }
 }
