@@ -77,5 +77,6 @@ dependencies {
     implementation(libs.jjwt.api)
     implementation(libs.jjwt.impl)
     implementation(libs.jjwt.jackson)
+    implementation(libs.volley)
 }
 
