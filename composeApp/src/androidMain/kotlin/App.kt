@@ -1,37 +1,40 @@
 
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-enum class MenuScreen() {
-    LoginOrRegister,
-    Login,
-    SignUpScreen,
-}
-
+const val SIGNUP_SCREEN_ROUTE = "signup_screen"
+const val LOGIN_SCREEN_ROUTE = "login_screen"
+const val DASHBOARD_SCREEN_ROUTE = "dashboard_screen"
 @Composable
 @Preview
 fun App(
     navController: NavHostController = rememberNavController()
 ) {
-    SignUpScreen()
-//    NavHost(
-//        navController = navController,
-//        startDestination = MenuScreen.SignUpScreen.name,
-//        modifier = Modifier
-//            .fillMaxSize()
-//            .verticalScroll(rememberScrollState())
-//    ) {
-//        composable(route = MenuScreen.SignUpScreen.name) {
-//            StartOrderScreen(
-//                quantityOptions = DataSource.quantityOptions,
-//                modifier = Modifier
-//                    .fillMaxSize()
-//                    .padding(dimensionResource(R.dimen.padding_medium))
-//            )
-//
-//        }
-//
-//    }
+    //SignUpScreen()
+    NavHost(
+        navController = navController,
+        startDestination = SIGNUP_SCREEN_ROUTE,
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        composable(SIGNUP_SCREEN_ROUTE) {
+            SignUpScreen() { token ->
+                navController.navigate("$DASHBOARD_SCREEN_ROUTE/$token")
+            }
+        }
+        /*composable(LOGIN_SCREEN_ROUTE) {
+            LogInScreen()
+        }*/
+        /*composable(DASHBOARD_SCREEN_ROUTE/{userId}) { backStackEntry ->
+            val userId: String = backStackEntry.arguments?.getString("userId")
+            DashboardScreen(userId)
+        }*/
+
+    }
 }

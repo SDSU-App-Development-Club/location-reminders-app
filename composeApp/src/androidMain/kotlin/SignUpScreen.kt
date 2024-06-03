@@ -1,3 +1,4 @@
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -44,7 +45,9 @@ fun GradientImageView(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun SignUpScreen() {
+fun SignUpScreen(
+    onSuccessfulLogin: (String) -> Unit
+) {
     Box(modifier = Modifier.fillMaxSize()) {
         GradientImageView()
         var emailField by remember { mutableStateOf("") }
@@ -90,7 +93,9 @@ fun SignUpScreen() {
             Button(
                 onClick = {
                     buttonContext.launch {
-                        RestAPIAccess.attemptSignup(emailField, passwordField)
+                        val token = RestAPIAccess.attemptSignup(emailField, passwordField)
+                        // TODO: Extract userId from token and pass into onSuccessfulLogin
+                        onSuccessfulLogin(token)
                     }
                 },
                 modifier = Modifier
