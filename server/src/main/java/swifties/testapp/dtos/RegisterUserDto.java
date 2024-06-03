@@ -5,10 +5,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class RegisterUserDto {
-    private String email;
-
-    private String password;
-
+public class RegisterUserDto extends LoginUserDto {
     // getters and setters here...
 }

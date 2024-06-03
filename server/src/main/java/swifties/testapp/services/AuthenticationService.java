@@ -9,42 +9,36 @@ import swifties.testapp.dtos.RegisterUserDto;
 import swifties.testapp.entity.User;
 import swifties.testapp.repository.UserRepository;
 
+import java.util.Optional;
+
 @Service
 public class AuthenticationService {
     private final UserRepository userRepository;
-
     private final PasswordEncoder passwordEncoder;
-
     private final AuthenticationManager authenticationManager;
 
-    public AuthenticationService(
-            UserRepository userRepository,
-            AuthenticationManager authenticationManager,
-            PasswordEncoder passwordEncoder
-    ) {
+    public AuthenticationService(UserRepository userRepository, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
-    public User signup(RegisterUserDto input) {
-        User user = new User()
-                .setEmail(input.getEmail())
-                .setPasswordHash(passwordEncoder.encode(input.getPassword()));
+    public Optional<User> signup(RegisterUserDto input) {
+        if (userRepository.existsByEmail(input.getEmail())) {
+            return Optional.empty();
+        } else {
+            User user = new User()
+                    .setEmail(input.getEmail())
+                    .setPasswordHash(passwordEncoder.encode(input.getPassword()));
 
-        return userRepository.save(user);
+            return Optional.of(userRepository.save(user));
+        }
     }
 
-    public User authenticate(LoginUserDto input) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        input.getEmail(),
-                        input.getPassword()
-                )
-        );
+    public Optional<User> authenticate(LoginUserDto input) {
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(input.getEmail(), input.getPassword()));
 
-        return userRepository.findByEmail(input.getEmail())
-                .orElseThrow();
+        return userRepository.findByEmail(input.getEmail());
     }
 }
 
