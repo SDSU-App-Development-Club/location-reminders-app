@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 import swifties.testapp.dtos.LoginUserDto;
 import swifties.testapp.dtos.RegisterUserDto;
 import swifties.testapp.entity.User;
-import swifties.testapp.responses.LoginResponse;
 import swifties.testapp.services.AuthenticationService;
 import swifties.testapp.services.JwtService;
 
@@ -30,10 +29,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginUserDto loginUserDto) {
-        return ResponseEntity.of(authenticationService.authenticate(loginUserDto).map(user -> {
-            String jwtToken = jwtService.generateToken(user);
-            return new LoginResponse(jwtToken, jwtService.getExpirationTime());
-        }));
+    public ResponseEntity<String> authenticate(@RequestBody LoginUserDto loginUserDto) {
+        return ResponseEntity.of(authenticationService.authenticate(loginUserDto).map(jwtService::generateToken));
     }
 }
