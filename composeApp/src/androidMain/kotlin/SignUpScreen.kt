@@ -95,7 +95,7 @@ fun SignUpScreen(
                     buttonContext.launch {
                         val token = RestAPIAccess.attemptSignup(emailField, passwordField)
                         // TODO: Extract userId from token and pass into onSuccessfulLogin
-                        onSuccessfulLogin(token)
+                        onSuccessfulLogin(token.jwt)
                     }
                 },
                 modifier = Modifier

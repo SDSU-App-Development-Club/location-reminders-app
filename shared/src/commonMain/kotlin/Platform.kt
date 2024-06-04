@@ -9,6 +9,10 @@ import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.Serializable
 
+@Serializable( )
+data class UserResponse(val userId: Int, val email: String)
+@Serializable
+data class LoginResponse(val user: UserResponse, val jwt: String)
 interface Platform {
     val name: String
 }
@@ -22,7 +26,7 @@ object RestAPIAccess {
         }
     }
 
-    suspend fun attemptSignup(username: String, password: String): String {
+    suspend fun attemptSignup(username: String, password: String): LoginResponse {
         @Serializable
         data class SignupDto(val email: String, val password: String)
 

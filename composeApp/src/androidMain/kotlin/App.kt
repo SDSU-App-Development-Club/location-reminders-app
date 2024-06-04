@@ -25,16 +25,16 @@ fun App(
     ) {
         composable(SIGNUP_SCREEN_ROUTE) {
             SignUpScreen { token ->
-                //navController.navigate("$DASHBOARD_SCREEN_ROUTE/$token")
+                navController.navigate("$DASHBOARD_SCREEN_ROUTE/$token")
             }
         }
         /*composable(LOGIN_SCREEN_ROUTE) {
             LogInScreen()
         }*/
-        /*composable("$DASHBOARD_SCREEN_ROUTE/{token}") { backStackEntry ->
+        composable("$DASHBOARD_SCREEN_ROUTE/{token}") { backStackEntry ->
             val userId: String = backStackEntry.arguments?.getString("token")!!
             DashboardScreen(userId)
-        }*/
+        }
 
     }
 }
