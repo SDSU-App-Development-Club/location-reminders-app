@@ -24,7 +24,7 @@ object RestAPIAccess {
 
     suspend fun attemptSignup(username: String, password: String): String {
         @Serializable
-        data class SignupDto(val username: String, val password: String)
+        data class SignupDto(val email: String, val password: String)
 
         // TODO: Fix the Spring backend to use TLS
         val response: HttpResponse = httpClient.post("http://10.0.2.2:8080/auth/signup") {
