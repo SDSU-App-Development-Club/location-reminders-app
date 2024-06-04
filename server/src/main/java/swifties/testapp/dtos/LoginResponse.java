@@ -1,6 +1,10 @@
 package swifties.testapp.dtos;
 
-import swifties.testapp.entity.User;
 
-public record LoginResponse(User user, String jwt) {
+public record LoginResponse(UserResponse user, String jwt) {
+    public record UserResponse(
+            int userId,
+            String email
+    ) {
+    }
 }

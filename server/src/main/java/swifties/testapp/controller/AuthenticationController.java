@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import swifties.testapp.dtos.LoginResponse.UserResponse;
 import swifties.testapp.dtos.LoginUserDto;
 import swifties.testapp.dtos.RegisterUserDto;
 import swifties.testapp.dtos.LoginResponse;
@@ -38,6 +40,6 @@ public class AuthenticationController {
 
     // Return JWT with account details alongside it
     private LoginResponse login(User user) {
-        return new LoginResponse(user, jwtService.generateToken(user));
+        return new LoginResponse(new UserResponse(user.getUserId(), user.getEmail()), jwtService.generateToken(user));
     }
 }
