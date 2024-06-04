@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import swifties.testapp.dtos.LoginUserDto;
 import swifties.testapp.dtos.RegisterUserDto;
+import swifties.testapp.dtos.LoginResponse;
 import swifties.testapp.entity.User;
 import swifties.testapp.services.AuthenticationService;
 import swifties.testapp.services.JwtService;
@@ -23,13 +24,20 @@ public class AuthenticationController {
         this.authenticationService = authenticationService;
     }
 
+    // Create account using email and password
     @PostMapping("/signup")
-    public ResponseEntity<User> register(@RequestBody RegisterUserDto registerUserDto) {
-        return ResponseEntity.of(authenticationService.signup(registerUserDto));
+    public ResponseEntity<LoginResponse> register(@RequestBody RegisterUserDto registerUserDto) {
+        return ResponseEntity.of(authenticationService.signup(registerUserDto).map(this::login));
     }
 
+    // Login with email and password
     @PostMapping("/login")
-    public ResponseEntity<String> authenticate(@RequestBody LoginUserDto loginUserDto) {
-        return ResponseEntity.of(authenticationService.authenticate(loginUserDto).map(jwtService::generateToken));
+    public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginUserDto loginUserDto) {
+        return ResponseEntity.of(authenticationService.authenticate(loginUserDto).map(this::login));
+    }
+
+    // Return JWT with account details alongside it
+    private LoginResponse login(User user) {
+        return new LoginResponse(user, jwtService.generateToken(user));
     }
 }
