@@ -24,17 +24,22 @@ fun App(
             .fillMaxSize()
     ) {
         composable(SIGNUP_SCREEN_ROUTE) {
-            SignUpScreen() { token ->
-                navController.navigate("$DASHBOARD_SCREEN_ROUTE/$token")
+            SignUpScreen { token ->
+                //navController.navigate("$DASHBOARD_SCREEN_ROUTE/$token")
             }
         }
         /*composable(LOGIN_SCREEN_ROUTE) {
             LogInScreen()
         }*/
-        /*composable(DASHBOARD_SCREEN_ROUTE/{userId}) { backStackEntry ->
-            val userId: String = backStackEntry.arguments?.getString("userId")
+        /*composable("$DASHBOARD_SCREEN_ROUTE/{token}") { backStackEntry ->
+            val userId: String = backStackEntry.arguments?.getString("token")!!
             DashboardScreen(userId)
         }*/
 
     }
+}
+
+@Composable
+fun DashboardScreen(userId: String) {
+
 }
