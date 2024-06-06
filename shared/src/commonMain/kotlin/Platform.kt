@@ -9,16 +9,16 @@ import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.Serializable
 
-@Serializable( )
+@Serializable
 data class UserResponse(val userId: Int, val email: String)
 @Serializable
 data class LoginResponse(val user: UserResponse, val jwt: String)
-interface Platform {
-    val name: String
-}
+@Serializable
+data class SignupDto(val email: String, val password: String)
 
-expect fun getPlatform(): Platform
+const val API_HOST = "http://10.0.2.2:8080"
 
+// TODO: Fix the Spring backend to use TLS
 object RestAPIAccess {
     private val httpClient = HttpClient {
         install(ContentNegotiation) {
@@ -27,11 +27,15 @@ object RestAPIAccess {
     }
 
     suspend fun attemptSignup(username: String, password: String): LoginResponse {
-        @Serializable
-        data class SignupDto(val email: String, val password: String)
+        val response: HttpResponse = httpClient.post("$API_HOST/auth/signup") {
+            contentType(ContentType.Application.Json)
+            setBody(SignupDto(username, password))
+        }
+        return response.body()
+    }
 
-        // TODO: Fix the Spring backend to use TLS
-        val response: HttpResponse = httpClient.post("http://10.0.2.2:8080/auth/signup") {
+    suspend fun attemptLogin(username: String, password: String): LoginResponse {
+        val response: HttpResponse = httpClient.post("$API_HOST/auth/login") {
             contentType(ContentType.Application.Json)
             setBody(SignupDto(username, password))
         }
