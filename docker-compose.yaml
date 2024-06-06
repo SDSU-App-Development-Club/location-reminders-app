@@ -1,5 +1,4 @@
 # If on windows, make sure to run with WSL and NOT the windows command line
-version: '3.1'
 services:
   postgres_db:
     # Alpine image is nearly 50% smaller than Ubuntu
