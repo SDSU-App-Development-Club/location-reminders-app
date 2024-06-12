@@ -1,3 +1,11 @@
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.SizeTransform
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.togetherWith
+import androidx.compose.animation.with
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,13 +21,18 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.ButtonDefaults.buttonColors
 import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.Icon
 import androidx.compose.material.TabRowDefaults.Divider
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,12 +42,16 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun DashboardScreen(userId: String) {
-    Box(modifier = Modifier
-        .fillMaxSize()) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
         GradientImageView()
         ScheduleScreen()
     }
 }
+
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun ScheduleScreen() {
     Column(
@@ -63,7 +80,9 @@ fun ScheduleScreen() {
         Divider(
             color = Color.White,
             thickness = 1.dp,
-            modifier = Modifier.padding(vertical = 8.dp).fillMaxWidth(0.9f)
+            modifier = Modifier
+                .padding(vertical = 8.dp)
+                .fillMaxWidth(0.9f)
         )
         Spacer(modifier = Modifier.height(60.dp))
         Text(
@@ -80,13 +99,47 @@ fun ScheduleScreen() {
             Text(text = "+ New Task", color = Color.Black)
         }
         Spacer(modifier = Modifier.weight(1f))
-        FloatingActionButton(
-            onClick = { /* Handle new task creation */ },
-            backgroundColor = Color.White,
-            contentColor = Color(0xFF4CAF50),
-            modifier = Modifier.padding(16.dp)
-        ) {
-            Icon(Icons.Default.Add, contentDescription = "Add Task")
+
+        var isClicked by remember { mutableStateOf(false) }
+
+        AnimatedContent(
+            targetState = isClicked,
+            transitionSpec = {
+                val durationMillis = 1000
+
+                if (targetState != initialState && targetState) {
+                    slideInVertically(animationSpec = tween(durationMillis)) { height -> height } togetherWith
+                            slideOutVertically(animationSpec = tween(durationMillis)) { height -> -height }
+                } else {
+                    slideInVertically(animationSpec = tween(durationMillis)) { height -> -height } togetherWith
+                            slideOutVertically(animationSpec = tween(durationMillis)) { height -> height }
+                }.using(SizeTransform(clip = false))
+            }, label = "Add Alert Popup Menu"
+        ) { buttonClicked ->
+            if (buttonClicked) {
+                Column(Modifier.fillMaxSize()) {
+                    Text(
+                        "Some content",
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(Color.White)
+                            .padding(top = 100.dp),
+                        fontSize = 26.sp
+                    )
+                }
+            } else {
+                // Add Button at bottom of screen
+                FloatingActionButton(
+                    onClick = { isClicked = true },
+                    backgroundColor = Color.White,
+                    contentColor = Color(0xFF4CAF50),
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .background(Color.White)
+                ) {
+                    Icon(Icons.Default.Add, contentDescription = "Add Task")
+                }
+            }
         }
     }
 }
