@@ -13,10 +13,7 @@ const val DASHBOARD_SCREEN_ROUTE = "dashboard_screen"
 
 @Composable
 @Preview
-fun App(
-    navController: NavHostController = rememberNavController()
-) {
-    //SignUpScreen()
+fun App(navController: NavHostController = rememberNavController()) {
     NavHost(
         navController = navController,
         startDestination = SIGNUP_SCREEN_ROUTE,
@@ -41,9 +38,4 @@ fun App(
             DashboardScreen(userId)
         }
     }
-}
-
-@Composable
-fun DashboardScreen(userId: String) {
-
 }
