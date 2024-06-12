@@ -54,69 +54,6 @@ fun SignUpScreen(
                 onClick = switchToLoginScreen
             )
         }
-/*
-        var emailField by remember { mutableStateOf("") }
-        var passwordField by remember { mutableStateOf("") }
-
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(25.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.Start
-        ) {
-            Text(
-                text = "Sign Up",
-                fontSize = 37.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.White
-            )
-            TextField(
-                modifier = Modifier
-                    .padding(top = 20.dp)
-                    .clip(RoundedCornerShape(20.dp))
-                    .fillMaxWidth()
-                    .background(color = Color.White),
-                value = emailField,
-                onValueChange = { emailField = it },
-                label = { Text(text = "Email Address") }
-            )
-            TextField(
-                modifier = Modifier
-                    .padding(top = 20.dp)
-                    .clip(RoundedCornerShape(20.dp))
-                    .fillMaxWidth()
-                    .background(color = Color.White),
-                value = passwordField,
-                onValueChange = { passwordField = it },
-                label = { Text(text = "Enter Password") },
-                visualTransformation = PasswordVisualTransformation(),
-            )
-
-            val buttonContext = rememberCoroutineScope()
-
-            Button(
-                onClick = {
-                    buttonContext.launch {
-                        val loginResponse = RestAPIAccess.attemptSignup(emailField, passwordField)
-                        switchToDashboard(loginResponse.jwt)
-                    }
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 20.dp)
-                    .height(55.dp)
-                    .clip(RoundedCornerShape(20.dp))
-                    .background(Color.White.copy(alpha = 0.8f))
-            ) {
-                // Overlay the gradient text on top of the button
-                Text(
-                    text = "Sign Up",
-                    fontSize = 25.sp,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-        }*/
 
         Spacer(modifier = Modifier.padding(top = 75.dp))
     }
