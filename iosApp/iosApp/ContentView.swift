@@ -17,13 +17,13 @@ struct ContentView: View {
                     // holds decorative squiggly lines
                     VStack {
                         Image("Welcome Page Squiggly 1")
-                            .offset(y: -110)
+                            .offset(y: -180)
                         
                         Image("Welcome Page Squiggly 2")
-                            .offset(x: -170, y: 30)
+                            .offset(x: -180, y: 30)
                         
                         Image("Welcome Page Squiggly 3")
-                            .offset(y: 50)
+                            .offset(y: 100)
                     }
                     
                     VStack {
