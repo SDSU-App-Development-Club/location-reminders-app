@@ -10,6 +10,7 @@
 		058557BB273AAA24004C7B11 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 058557BA273AAA24004C7B11 /* Assets.xcassets */; };
 		058557D9273AAEEB004C7B11 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 058557D8273AAEEB004C7B11 /* Preview Assets.xcassets */; };
 		2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2152FB032600AC8F00CF470E /* iOSApp.swift */; };
+		560C6C572C37962200814D6C /* ListScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 560C6C562C37962200814D6C /* ListScreen.swift */; };
 		566330462C16C4B6005548FA /* SignUpScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 566330452C16C4B6005548FA /* SignUpScreen.swift */; };
 		566330482C16C76A005548FA /* LoginInScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 566330472C16C76A005548FA /* LoginInScreen.swift */; };
 		56BC28662C0EF662002623FA /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56BC28652C0EF662002623FA /* ColorExtension.swift */; };
@@ -20,6 +21,7 @@
 		058557BA273AAA24004C7B11 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		058557D8273AAEEB004C7B11 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		2152FB032600AC8F00CF470E /* iOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSApp.swift; sourceTree = "<group>"; };
+		560C6C562C37962200814D6C /* ListScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListScreen.swift; sourceTree = "<group>"; };
 		566330452C16C4B6005548FA /* SignUpScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpScreen.swift; sourceTree = "<group>"; };
 		566330472C16C76A005548FA /* LoginInScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginInScreen.swift; sourceTree = "<group>"; };
 		56BC28652C0EF662002623FA /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
@@ -78,6 +80,7 @@
 			children = (
 				058557BA273AAA24004C7B11 /* Assets.xcassets */,
 				7555FF82242A565900829871 /* ContentView.swift */,
+				560C6C562C37962200814D6C /* ListScreen.swift */,
 				566330472C16C76A005548FA /* LoginInScreen.swift */,
 				566330452C16C4B6005548FA /* SignUpScreen.swift */,
 				56BC28652C0EF662002623FA /* ColorExtension.swift */,
@@ -193,6 +196,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				566330482C16C76A005548FA /* LoginInScreen.swift in Sources */,
+				560C6C572C37962200814D6C /* ListScreen.swift in Sources */,
 				2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */,
 				7555FF83242A565900829871 /* ContentView.swift in Sources */,
 				56BC28662C0EF662002623FA /* ColorExtension.swift in Sources */,
