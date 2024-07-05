@@ -47,7 +47,7 @@ fun LogInScreen(
                 switchToDashboard(loginResponse.jwt)
             }
         ) {
-            switchCommand(
+            SwitchCommand(
                 label = "Don't have an account?",
                 clickableText = "Sign up",
                 onClick = switchToSignUpScreen
@@ -147,7 +147,7 @@ fun UsernamePasswordAndButton(
 }
 
 @Composable
-fun switchCommand(label: String, clickableText: String, onClick: () -> Unit) {
+fun SwitchCommand(label: String, clickableText: String, onClick: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -155,7 +155,7 @@ fun switchCommand(label: String, clickableText: String, onClick: () -> Unit) {
         horizontalArrangement = Arrangement.spacedBy(6.dp)
     ) {
         Text(
-            text = "Already have an account?",
+            text = label,
             fontSize = 18.sp,
             color = Color.White,
         )

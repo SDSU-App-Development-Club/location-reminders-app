@@ -1,3 +1,4 @@
+import android.content.SharedPreferences
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -13,24 +14,20 @@ const val DASHBOARD_SCREEN_ROUTE = "dashboard_screen"
 
 @Composable
 @Preview
-fun App(navController: NavHostController = rememberNavController()) {
+fun App(prefs: SharedPreferences) {
+    val navController: NavHostController = rememberNavController()
+    val storedJwt = prefs.getString("jwt", null)
+
     NavHost(
         navController = navController,
         startDestination = SIGNUP_SCREEN_ROUTE,
-        modifier = Modifier
-            .fillMaxSize()
+        modifier = Modifier.fillMaxSize()
     ) {
         composable(SIGNUP_SCREEN_ROUTE) {
-            SignUpScreen(
-                { token -> navController.navigate("$DASHBOARD_SCREEN_ROUTE/$token") },
-                { navController.navigate(LOGIN_SCREEN_ROUTE) },
-            )
+            SignUpScreen(goToDashboard(prefs, navController)) { navController.navigate(LOGIN_SCREEN_ROUTE) }
         }
         composable(LOGIN_SCREEN_ROUTE) {
-            LogInScreen(
-                { token -> navController.navigate("$DASHBOARD_SCREEN_ROUTE/$token") },
-                { navController.navigate(SIGNUP_SCREEN_ROUTE) },
-            )
+            LogInScreen(goToDashboard(prefs, navController)) { navController.navigate(SIGNUP_SCREEN_ROUTE) }
 
         }
         composable("$DASHBOARD_SCREEN_ROUTE/{token}") { backStackEntry ->
@@ -38,4 +35,15 @@ fun App(navController: NavHostController = rememberNavController()) {
             DashboardScreen(userId)
         }
     }
+
+    if (storedJwt != null) {
+        navController.navigate("$DASHBOARD_SCREEN_ROUTE/$storedJwt")
+    }
+}
+
+private fun goToDashboard(prefs: SharedPreferences, navController: NavHostController) = { token: String ->
+    navController.navigate("$DASHBOARD_SCREEN_ROUTE/$token")
+    prefs.edit()
+        .putString("jwt", token)
+        .apply()
 }
