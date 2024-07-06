@@ -1,4 +1,3 @@
-
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
@@ -12,9 +11,9 @@ import androidx.compose.ui.unit.dp
 import swifties.testapp.R
 
 @Composable
-fun GradientImageView(modifier: Modifier = Modifier) {
+fun GradientImageView(modifier: Modifier = Modifier, resourceId: Int) {
     Image(
-        painter = painterResource(id = R.drawable.welcome_page), // Replace with your image resource
+        painter = painterResource(id = resourceId), // Replace with your image resource
         contentDescription = null,
         contentScale = ContentScale.Crop, // Scale the image to fill the size
         modifier = modifier.fillMaxSize()
@@ -27,7 +26,7 @@ fun SignUpScreen(
     switchToLoginScreen: () -> Unit,
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
-        GradientImageView()
+        GradientImageView(resourceId = R.drawable.signup_page)
 
         UsernamePasswordAndButton(
             title = "Sign Up",
