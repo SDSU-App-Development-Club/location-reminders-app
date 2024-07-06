@@ -67,7 +67,10 @@ struct LogInScreen: View {
                             .offset(y: -20)
                             .font(.system(size: 16))
                         
-                        Button (action: {}) { //create account button
+                        NavigationLink {
+                            ReminderScreen()
+                            
+                        } label: {
                             ZStack {
                                 RoundedRectangle(cornerRadius: 15)
                                     .frame(width: 300, height: 40) // Adjust the frame size as needed
@@ -77,9 +80,10 @@ struct LogInScreen: View {
                                     .font(.system(size: 20))
                                     .fontWeight(.bold)
                                 //fix coloring and add a drop shadow
-                                
-                            }
-                            .offset(y: -10)
+                            
+                        }
+                        .offset(y: -10)
+                        
                         }
                         
                         NavigationLink {
