@@ -41,13 +41,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import swifties.testapp.R
 
 @Composable
-fun DashboardScreen(userId: String) {
+fun DashboardScreen() {
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
-        GradientImageView()
+        GradientImageView(resourceId = R.drawable.dashboard_page)
         ScheduleScreen()
     }
 }
@@ -103,7 +104,7 @@ fun ScheduleScreen() {
             }
         }
 
-        Spacer(modifier = Modifier.height(if (showPopup) 0.dp else 400.dp))
+        Spacer(modifier = Modifier.height(if (showPopup) 0.dp else 412.dp))
 
         AnimatedContent(
             targetState = showPopup,
@@ -130,14 +131,7 @@ fun ScheduleScreen() {
                             .padding(top = 32.dp)
                             .clip(RoundedCornerShape(topEnd = 20.dp))
                     ) {
-                        Text(
-                            "Some content",
-                            modifier = Modifier
-                                .background(Color.White)
-                                .padding(top = 100.dp)
-                                .fillMaxSize(),
-                            fontSize = 26.sp
-                        )
+                        CreateAlertScreen()
                     }
                     FloatingActionButton(
                         onClick = {
@@ -157,18 +151,39 @@ fun ScheduleScreen() {
                 }
             } else {
                 // Show minimized
-                FloatingActionButton(
-                    onClick = {
-                        showPopup = true
-                        showList.targetState = false
-                    },
-                    backgroundColor = Color.White,
-                    contentColor = Color(0xFF4CAF50),
-                    modifier = Modifier
-                        .requiredSize(50.dp)
-                        .align(Alignment.CenterHorizontally),
-                ) {
-                    Icon(Icons.Default.Add, contentDescription = "Add Task")
+                Box {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(top = 32.dp)
+                            .clip(RoundedCornerShape(topEnd = 20.dp))
+                    ) {
+                        Text(
+                            "New Task",
+                            modifier = Modifier
+                                .background(Color.White)
+                                .padding(top = 8.dp, start = 72.dp)
+                                .fillMaxSize(),
+                            fontSize = 28.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = Color(0xFF009a88)
+                        )
+                    }
+                    FloatingActionButton(
+                        onClick = {
+                            showPopup = !showPopup
+                            showList.targetState = !showList.targetState
+                        },
+                        contentColor = Color.White,
+                        backgroundColor = Color(0xFF009a88),
+                        elevation = elevation(0.dp, 0.dp),
+                        shape = CircleShape,
+                        modifier = Modifier
+                            .size(64.dp)
+                            .border(6.dp, Color.White, CircleShape),
+                    ) {
+                        Icon(Icons.Default.Add, contentDescription = "Add Task")
+                    }
                 }
             }
         }

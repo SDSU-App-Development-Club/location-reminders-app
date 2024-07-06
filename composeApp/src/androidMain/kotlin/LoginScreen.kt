@@ -31,6 +31,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
+import swifties.testapp.R
 
 @Composable
 fun LogInScreen(
@@ -38,7 +39,7 @@ fun LogInScreen(
     switchToSignUpScreen: () -> Unit,
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
-        GradientImageView()
+        GradientImageView(resourceId = R.drawable.login_page)
         UsernamePasswordAndButton(
             title = "Login",
             buttonLabel = "Login",

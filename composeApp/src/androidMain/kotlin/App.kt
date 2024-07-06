@@ -32,7 +32,7 @@ fun App(prefs: SharedPreferences) {
         }
         composable("$DASHBOARD_SCREEN_ROUTE/{token}") { backStackEntry ->
             val userId: String = backStackEntry.arguments?.getString("token")!!
-            DashboardScreen(userId)
+            DashboardScreen()
         }
     }
 
