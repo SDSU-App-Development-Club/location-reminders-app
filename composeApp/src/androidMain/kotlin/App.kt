@@ -36,6 +36,7 @@ fun App(prefs: SharedPreferences) {
         }
     }
 
+    // Add check to see if token is expired
     if (storedJwt != null) {
         navController.navigate("$DASHBOARD_SCREEN_ROUTE/$storedJwt")
     }

@@ -78,5 +78,7 @@ dependencies {
     implementation(libs.jjwt.impl)
     implementation(libs.jjwt.jackson)
     implementation(libs.volley)
+    implementation("androidx.emoji2:emoji2-emojipicker:1.4.0-beta05")
+
 }
 

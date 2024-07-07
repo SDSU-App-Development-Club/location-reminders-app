@@ -1,3 +1,4 @@
+
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.fadeIn
@@ -109,22 +110,25 @@ fun ScheduleScreen() {
             Spacer(modifier = Modifier.height(animatedHeight))
 
             // Box allows overlapping the
-            Box(modifier = Modifier.fillMaxSize()) {
+            Box(modifier = Modifier
+                .fillMaxSize()) {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(top = 32.dp)
                         .clip(RoundedCornerShape(topEnd = 20.dp))
+                        .background(Color(235, 235, 235))
                 ) {
                     Text(
-                        "New Task",
+                        "New Alert",
                         modifier = Modifier
                             .background(Color.White)
                             .padding(top = 8.dp, start = 72.dp)
                             .fillMaxWidth(),
                         fontSize = 28.sp,
                         fontWeight = FontWeight.SemiBold,
-                        color = Color(0xFF009a88)
+                        color = Color(0xFF009a88),
+
                     )
 
                     CreateAlertScreen()
