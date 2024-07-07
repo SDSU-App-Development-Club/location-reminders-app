@@ -1,11 +1,7 @@
-import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.SizeTransform
-import androidx.compose.animation.core.MutableTransitionState
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
-import androidx.compose.animation.togetherWith
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -16,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -55,17 +50,17 @@ fun DashboardScreen() {
 
 @Composable
 fun ScheduleScreen() {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
+    Box(
         modifier = Modifier.fillMaxSize()
     ) {
         var showPopup by remember { mutableStateOf(false) }
-        val showList = remember {
-            MutableTransitionState(true)
-        }
 
         Spacer(modifier = Modifier.height(50.dp))
-        AnimatedVisibility(visibleState = showList) {
+        AnimatedVisibility(
+            visible = !showPopup,
+            enter = fadeIn(),
+            exit = fadeOut(),
+        ) {
             Column(modifier = Modifier.padding(15.dp)) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -104,86 +99,49 @@ fun ScheduleScreen() {
             }
         }
 
-        Spacer(modifier = Modifier.height(if (showPopup) 0.dp else 412.dp))
+        // Column of spacer and the popup menu
+        Column {
+            val animatedHeight by animateDpAsState(
+                targetValue = if (showPopup) 40.dp else 680.dp
+            )
 
-        AnimatedContent(
-            targetState = showPopup,
-            transitionSpec = {
-                val durationMillis = 500
+            // Large space keeps menu minimized
+            Spacer(modifier = Modifier.height(animatedHeight))
 
-                if (targetState != initialState && targetState) {
-                    slideInVertically(animationSpec = tween(durationMillis)) { height -> height } togetherWith
-                            slideOutVertically(animationSpec = tween(durationMillis)) { height -> -height }
-                } else {
-                    slideInVertically(animationSpec = tween(durationMillis)) { height -> -height } togetherWith
-                            slideOutVertically(animationSpec = tween(durationMillis)) { height -> height }
-                }.using(SizeTransform(clip = false))
-            },
-            label = "Add Alert Popup Menu",
-            modifier = Modifier.fillMaxSize()
-        ) { buttonClicked ->
-            if (buttonClicked) {
-                // Show entire menu
-                Box {
-                    Column(
+            // Box allows overlapping the
+            Box(modifier = Modifier.fillMaxSize()) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(top = 32.dp)
+                        .clip(RoundedCornerShape(topEnd = 20.dp))
+                ) {
+                    Text(
+                        "New Task",
                         modifier = Modifier
-                            .fillMaxSize()
-                            .padding(top = 32.dp)
-                            .clip(RoundedCornerShape(topEnd = 20.dp))
-                    ) {
-                        CreateAlertScreen()
-                    }
-                    FloatingActionButton(
-                        onClick = {
-                            showPopup = false
-                            showList.targetState = true
-                        },
-                        contentColor = Color.White,
-                        backgroundColor = Color(0xFF009a88),
-                        elevation = elevation(0.dp, 0.dp),
-                        shape = CircleShape,
-                        modifier = Modifier
-                            .size(64.dp)
-                            .border(6.dp, Color.White, CircleShape),
-                    ) {
-                        Icon(Icons.Default.Add, contentDescription = "Add Task")
-                    }
+                            .background(Color.White)
+                            .padding(top = 8.dp, start = 72.dp)
+                            .fillMaxWidth(),
+                        fontSize = 28.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = Color(0xFF009a88)
+                    )
+
+                    CreateAlertScreen()
                 }
-            } else {
-                // Show minimized
-                Box {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(top = 32.dp)
-                            .clip(RoundedCornerShape(topEnd = 20.dp))
-                    ) {
-                        Text(
-                            "New Task",
-                            modifier = Modifier
-                                .background(Color.White)
-                                .padding(top = 8.dp, start = 72.dp)
-                                .fillMaxSize(),
-                            fontSize = 28.sp,
-                            fontWeight = FontWeight.SemiBold,
-                            color = Color(0xFF009a88)
-                        )
-                    }
-                    FloatingActionButton(
-                        onClick = {
-                            showPopup = !showPopup
-                            showList.targetState = !showList.targetState
-                        },
-                        contentColor = Color.White,
-                        backgroundColor = Color(0xFF009a88),
-                        elevation = elevation(0.dp, 0.dp),
-                        shape = CircleShape,
-                        modifier = Modifier
-                            .size(64.dp)
-                            .border(6.dp, Color.White, CircleShape),
-                    ) {
-                        Icon(Icons.Default.Add, contentDescription = "Add Task")
-                    }
+                FloatingActionButton(
+                    onClick = {
+                        showPopup = !showPopup
+                    },
+                    contentColor = Color.White,
+                    backgroundColor = Color(0xFF009a88),
+                    elevation = elevation(0.dp, 0.dp),
+                    shape = CircleShape,
+                    modifier = Modifier
+                        .size(64.dp)
+                        .border(6.dp, Color.White, CircleShape),
+                ) {
+                    Icon(Icons.Default.Add, contentDescription = "Add Task")
                 }
             }
         }

@@ -12,9 +12,10 @@ import androidx.compose.ui.unit.sp
 fun CreateAlertScreen() {
     Text(
         "Some content",
+        color = Color.Black,
         modifier = Modifier
             .background(Color.White)
-            .padding(top = 100.dp)
+            .padding(top = 10.dp)
             .fillMaxSize(),
         fontSize = 26.sp
     )
