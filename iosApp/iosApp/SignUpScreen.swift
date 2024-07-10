@@ -60,18 +60,11 @@ struct SignUpScreen: View {
                             .offset(y: -20)
                         
                         Button (action: {
-                            
-                            RestAPIAccess().attemptSignup(
-                                username: email,
-                                password: password) { (response:LoginResponse?, error) in
-                                    
-                                    if let response = response {
-                                        response.jwt
-                                    }
-                                    
+                            RestAPIAccess().attemptSignup(username: email, password: password) { response, error in
+                                if let response = response {
+                                    print(response)
                                 }
-                            
-                            
+                            }
                         }) { //create account button
                             ZStack {
                                 RoundedRectangle(cornerRadius: 18)
