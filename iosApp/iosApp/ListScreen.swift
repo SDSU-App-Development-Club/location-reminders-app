@@ -30,77 +30,36 @@ struct ListScreen: View {
             }
             
             VStack {
-                Text("Lists")
-                    .fontWeight(.semibold)
-                    .font(.system(size: 32))
-                    .frame(maxWidth: 340, maxHeight: 75, alignment: .leading)
-                    .foregroundColor(Color.white)
+                      VStack(alignment: .leading, spacing: 4) {
+                          Text("Lists")
+                              .fontWeight(.semibold)
+                              .font(.system(size: 32))
+                              .foregroundColor(Color.white)
+                          
+                          Rectangle()
+                              .frame(width: 340, height: 2)
+                              .foregroundColor(Color.white)
+                      }
+                      .frame(maxWidth: .infinity, alignment: .leading)
+                      .padding(.leading, 20)
                 
-                Rectangle()
-                    .frame(maxWidth: 359, maxHeight: 2, alignment: .center)
-                    .foregroundColor(Color.white)
+                Spacer()
+                    .frame(height: 40)
                 
+                //three buttons: reminders, completed, & new tasks
                 HStack {
                     
-                    // reminder button TODO: need to make into actual button
-                    NavigationLink{
-                        ReminderScreen()
-                    } label: {
-                        ZStack {
-                            Rectangle()
-                                .frame(width: 166, height: 129, alignment: .trailing)
-                                .cornerRadius(15.0)
-                                .foregroundColor(Color(hex: "#b0fcf4"))
-                            
-                            VStack {
-                                HStack {
-                                    Image(systemName: "mappin.and.ellipse")
-                                        .foregroundColor(.black)
-                                        .font(.system(size: 24))
-                                        .padding([.top, .leading], 10)
-                                    Spacer()
-                                    Text("2")
-                                        .foregroundColor(.black)
-                                        .font(.system(size: 24, weight: .bold))
-                                        .padding([.top, .trailing], 10)
-                                }
-                                Spacer()
-                                Text("Reminders")
-                                    .foregroundColor(.black)
-                                    .font(.system(size: 16, weight: .semibold))
-                                    .padding(.bottom, 10)
-                            }
-                            .frame(width: 166, height: 129, alignment: .leading)
-                        }
-                    }
+                    // reminder button
+                    ReminderButton()
                     
                     Spacer()
                         .frame(width: 28)
                     
-                    // completed button TODO: need to make into actual button
-                    ZStack {
-                        Rectangle()
-                            .frame(width: 166, height: 129, alignment: .trailing)
-                            .cornerRadius(15.0)
-                            .foregroundColor(Color(hex: "#b0fcf4"))
-                        
-                        VStack {
-                            HStack {
-                                Image(systemName: "checkmark")
-                                    .foregroundColor(.black)
-                                    .font(.system(size: 24))
-                                    .padding([.top, .leading], 10)
-                                Spacer()
-                                // Add any other elements here if needed
-                            }
-                            Spacer()
-                            Text("Completed")
-                                .foregroundColor(.black)
-                                .font(.system(size: 16, weight: .semibold))
-                                .padding(.bottom, 10)
-                        }
-                        .frame(width: 166, height: 129, alignment: .leading)
-                    }
+                    // completed button
+                    CompleteButton()
+                    
+                    
+                    
                 }
                 
                 Spacer()
@@ -115,3 +74,71 @@ struct ListScreen: View {
     ListScreen()
 }
 
+
+struct CompleteButton: View {
+    var body: some View {
+        NavigationLink{
+            CompletedScreen()
+        } label: {
+            ZStack {
+                Rectangle()
+                    .cornerRadius(15.0)
+                    .foregroundColor(Color(hex: "#b0fcf4"))
+                    .frame(width: 166, height: 129, alignment: .trailing)
+                
+                VStack {
+                    HStack {
+                        Image(systemName: "checkmark")
+                            .foregroundColor(.black)
+                            .font(.system(size: 40))
+                            .padding([.top, .leading], 10)
+                        Spacer()
+                        // Add any other elements here if needed
+                    }
+                    Spacer()
+                    Text("Completed")
+                        .foregroundColor(.black)
+                        .font(.system(size: 28, weight: .semibold))
+                        .padding(.bottom, 10)
+                }
+                .frame(width: 166, height: 129, alignment: .leading)
+            }
+            
+        }
+    }
+}
+
+struct ReminderButton: View {
+    var body: some View {
+        NavigationLink{
+            ReminderScreen()
+        } label: {
+            ZStack {
+                Rectangle()
+                    .frame(width: 166, height: 129, alignment: .trailing)
+                    .cornerRadius(15.0)
+                    .foregroundColor(Color(hex: "#b0fcf4"))
+                
+                VStack {
+                    HStack {
+                        Image(systemName: "mappin.and.ellipse")
+                            .foregroundColor(.black)
+                            .font(.system(size: 36))
+                            .padding([.top, .leading], 10)
+                        Spacer()
+                        Text("2")
+                            .foregroundColor(.black)
+                            .font(.system(size: 42, weight: .bold))
+                            .padding([.top, .trailing], 10)
+                    }
+                    Spacer()
+                    Text("Reminders")
+                        .foregroundColor(.black)
+                        .font(.system(size: 28, weight: .semibold))
+                        .padding(.bottom, 10)
+                }
+                .frame(width: 166, height: 129, alignment: .leading)
+            }
+        }
+    }
+}
