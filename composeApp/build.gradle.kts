@@ -79,6 +79,7 @@ dependencies {
     implementation(libs.jjwt.jackson)
     implementation(libs.volley)
     implementation("androidx.emoji2:emoji2-emojipicker:1.4.0-beta05")
+    implementation(libs.androidx.material3.android)
 
 }
 
