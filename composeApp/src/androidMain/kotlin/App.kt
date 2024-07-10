@@ -28,7 +28,6 @@ fun App(prefs: SharedPreferences) {
         }
         composable(LOGIN_SCREEN_ROUTE) {
             LogInScreen(goToDashboard(prefs, navController)) { navController.navigate(SIGNUP_SCREEN_ROUTE) }
-
         }
         composable("$DASHBOARD_SCREEN_ROUTE/{token}") { backStackEntry ->
             val userId: String = backStackEntry.arguments?.getString("token")!!

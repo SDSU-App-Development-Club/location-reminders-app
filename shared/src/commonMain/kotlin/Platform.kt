@@ -4,8 +4,7 @@ import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.HttpResponse
-import io.ktor.http.ContentType
-import io.ktor.http.contentType
+import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.Serializable
 
@@ -26,10 +25,13 @@ object RestAPIAccess {
         }
     }
 
-    suspend fun attemptSignup(username: String, password: String): LoginResponse {
+    suspend fun attemptSignup(username: String, password: String): LoginResponse? {
         val response: HttpResponse = httpClient.post("$API_HOST/auth/signup") {
             contentType(ContentType.Application.Json)
             setBody(SignupDto(username, password))
+        }
+        if (response.status == HttpStatusCode.Conflict) {
+            return null
         }
         return response.body()
     }

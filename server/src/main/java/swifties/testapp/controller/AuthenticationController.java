@@ -1,5 +1,6 @@
 package swifties.testapp.controller;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,10 +27,13 @@ public class AuthenticationController {
         this.authenticationService = authenticationService;
     }
 
-    // Create account using email and password
+    // Create account using email and password. Returns 409 if the account wasn't found
     @PostMapping("/signup")
-    public ResponseEntity<LoginResponse> register(@RequestBody RegisterUserDto registerUserDto) {
-        return ResponseEntity.of(authenticationService.signup(registerUserDto).map(this::login));
+    public ResponseEntity<LoginResponse> signup(@RequestBody RegisterUserDto registerUserDto) {
+        return authenticationService.signup(registerUserDto)
+                .map(this::login)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.CONFLICT).build());
     }
 
     // Login with email and password
