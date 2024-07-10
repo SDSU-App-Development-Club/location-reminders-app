@@ -16,7 +16,7 @@ data class LoginResponse(val user: UserResponse, val jwt: String)
 @Serializable
 data class SignupDto(val email: String, val password: String)
 
-const val API_HOST = "http://10.0.2.2:8080"
+expect val API_HOST: String
 
 // TODO: Fix the Spring backend to use TLS
 object RestAPIAccess {
