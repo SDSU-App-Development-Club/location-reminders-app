@@ -56,13 +56,13 @@ fun ScheduleScreen() {
     ) {
         var showPopup by remember { mutableStateOf(false) }
 
-        Spacer(modifier = Modifier.height(50.dp))
         AnimatedVisibility(
             visible = !showPopup,
             enter = fadeIn(),
             exit = fadeOut(),
         ) {
             Column(modifier = Modifier.padding(15.dp)) {
+                Spacer(modifier = Modifier.height(50.dp))
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier

@@ -10,9 +10,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults.buttonColors
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults.textFieldColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -26,6 +29,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
@@ -97,6 +101,13 @@ fun UsernamePasswordAndButton(
         // Extra fields in case Sign Up takes more fields
         beforeFields()
 
+        val teal = Color(0xFF009a88)
+        val textFieldColors = textFieldColors(
+            focusedIndicatorColor = teal,
+            focusedLabelColor = teal,
+            cursorColor = teal,
+        )
+
         // Email field
         TextField(
             modifier = Modifier
@@ -106,6 +117,7 @@ fun UsernamePasswordAndButton(
                 .background(color = Color.White),
             value = emailField,
             onValueChange = { emailField = it },
+            colors = textFieldColors,
             label = { Text(text = "Email Address") }
         )
         // Password field
@@ -117,8 +129,10 @@ fun UsernamePasswordAndButton(
                 .background(color = Color.White),
             value = passwordField,
             onValueChange = { passwordField = it },
+            colors = textFieldColors,
             label = { Text(text = "Enter Password") },
             visualTransformation = PasswordVisualTransformation(),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         )
 
         // Sign in button
@@ -127,12 +141,15 @@ fun UsernamePasswordAndButton(
             onClick = {
                 buttonContext.launch { onButtonClick(emailField, passwordField) }
             },
+            colors = buttonColors(
+                backgroundColor = Color.White,
+                contentColor = teal,
+            ),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 20.dp)
                 .height(55.dp)
                 .clip(RoundedCornerShape(20.dp))
-                .background(Color.White.copy(alpha = 0.8f))
         ) {
             // Overlay the gradient text on top of the button
             Text(
@@ -162,12 +179,14 @@ fun SwitchCommand(label: String, clickableText: String, onClick: () -> Unit) {
         )
         ClickableText(
             text = buildAnnotatedString {
-                pushStyle(SpanStyle(
-                    fontWeight = FontWeight.Bold,
-                    textDecoration = TextDecoration.Underline,
-                    color = Color.White,
-                    fontSize = 18.sp
-                ))
+                pushStyle(
+                    SpanStyle(
+                        fontWeight = FontWeight.Bold,
+                        textDecoration = TextDecoration.Underline,
+                        color = Color.White,
+                        fontSize = 18.sp
+                    )
+                )
                 append(clickableText)
                 pop()
             },
