@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import Shared
 
 struct LogInScreen: View {
     @State private var email: String = ""
@@ -67,10 +68,16 @@ struct LogInScreen: View {
                             .offset(y: -20)
                             .font(.system(size: 16))
                         
-                        NavigationLink {
-                            ReminderScreen()
+                       
+                        
+                        Button(action: {
+                            RestAPIAccess().attemptLogin(username: email, password: password) { response, error in
+                                if let response = response {
+                                    print(response)
+                                }
+                            }
                             
-                        } label: {
+                        }){
                             ZStack {
                                 RoundedRectangle(cornerRadius: 15)
                                     .frame(width: 300, height: 40) // Adjust the frame size as needed
@@ -81,24 +88,17 @@ struct LogInScreen: View {
                                     .fontWeight(.bold)
                                 //fix coloring and add a drop shadow
                             
+                            }
+                            .offset(y: -10)
                         }
-                        .offset(y: -10)
                         
-                        }
                         
-                        NavigationLink {
-                            // destination view to navigate to
-                            SignUpScreen()
-                        } label: {
-                            Text ("Don't have an account?")
-                                .foregroundColor(.white)
-                            + Text(" Sign Up.")
-                                .foregroundColor(.white)
-                                .bold()
-                        }
-                        .frame(width: 290, height: 20, alignment: .leading)
-                        .font(.system(size: 16))
-                        
+                        //turn into a button
+                        Text ("Don't have an account?")
+                            .foregroundColor(.white)
+                        + Text(" Sign Up.")
+                            .foregroundColor(.white)
+                            .bold()
                     
                         
                     }
