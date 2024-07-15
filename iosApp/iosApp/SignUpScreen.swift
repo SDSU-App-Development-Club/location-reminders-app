@@ -18,6 +18,8 @@ struct SignUpScreen: View {
     @State private var password: String = ""
     @State private var signInSuccess = false
     @State private var needLogIn = false
+    @State private var showingAlert = false
+    
     
     
     var body: some View {
@@ -47,7 +49,7 @@ struct SignUpScreen: View {
                                 
                                 Password(password: $password)
                                
-                                CreateAccountButton(email: $email, password: $password, signInSuccess: $signInSuccess)
+                                CreateAccountButton(email: $email, password: $password, signInSuccess: $signInSuccess, showingAlert: $showingAlert)
                                 
                                 //turn into a button
                                 AlreadyHaveAnAccount(needLogIn: $needLogIn)
@@ -147,12 +149,15 @@ struct CreateAccountButton: View {
     @Binding var email: String
     @Binding var password: String
     @Binding var signInSuccess: Bool
+    @Binding var showingAlert: Bool
     var body: some View {
-        Button(action: {
+        Button(action: { // test signup screen for error to show up when blank fields are sent in when fixed by max (put here july 14th 2024 at 20:24)
             RestAPIAccess().attemptSignup(username: email, password: password) {
                 response, error in
                 if let response = response {
                     signInSuccess = true
+                } else {
+                    showingAlert = true
                 }
                 
             }
@@ -167,6 +172,11 @@ struct CreateAccountButton: View {
                 //fix coloring and add a drop shadow
             }
             .offset(y: -10)
+        }
+        .alert("Creating an Account Failed", isPresented: $showingAlert) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text(email.isEmpty || password.isEmpty ? "Please enter both email and password." : "Creating Account failed. Please try again.")
         }
     }
 }
