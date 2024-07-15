@@ -14,59 +14,41 @@
 import SwiftUI
 
 struct ListScreen: View {
+    @State private var reminderScreen = false
+    @State private var completedScreen = false
+    
     var body: some View {
         
-        ZStack {
-            Image("Lists screen")
-                .resizable()
-                .edgesIgnoringSafeArea(.all)
-            
-            VStack {
-                Image("Lists screen squiggly 1")
-                    .offset(y: 160)
+        NavigationStack {
+            ZStack {
                 
-                Image("Lists screen squiggly 2")
-                    .offset(y: -190)
-            }
-            
-            VStack {
-                      VStack(alignment: .leading, spacing: 4) {
-                          Text("Lists")
-                              .fontWeight(.semibold)
-                              .font(.system(size: 32))
-                              .foregroundColor(Color.white)
-                          
-                          Rectangle()
-                              .frame(width: 340, height: 2)
-                              .foregroundColor(Color.white)
-                      }
-                      .frame(maxWidth: .infinity, alignment: .leading)
-                      .padding(.leading, 20)
+                BackgroundView()
                 
-                Spacer()
-                    .frame(height: 40)
+                BackgroundDetailsView()
                 
-                //three buttons: reminders, completed, & new tasks
-                HStack {
-                    
-                    // reminder button
-                    ReminderButton()
+                VStack {
+                    ListTitle()
                     
                     Spacer()
-                        .frame(width: 28)
+                        .frame(height: 40)
                     
-                    // completed button
-                    CompleteButton()
+                    //three buttons: reminders, completed, & new tasks
+                    HStack {
+                        // reminder button
+                        ReminderButton()
+                        
+                        Spacer()
+                            .frame(width: 28)
+                        
+                        // completed button
+                        CompleteButton()
+                    }
                     
-                    
-                    
+                    Spacer()
                 }
-                
-                Spacer()
+                .frame(maxHeight: 670)
             }
-            .frame(maxHeight: 670)
         }
-        
     }
 }
 
@@ -140,5 +122,42 @@ struct ReminderButton: View {
                 .frame(width: 166, height: 129, alignment: .leading)
             }
         }
+    }
+}
+
+struct BackgroundView: View {
+    var body: some View {
+        Image("Lists screen")
+            .resizable()
+            .edgesIgnoringSafeArea(.all)
+    }
+}
+
+struct BackgroundDetailsView: View {
+    var body: some View {
+        VStack {
+            Image("Lists screen squiggly 1")
+                .offset(y: 160)
+            
+            Image("Lists screen squiggly 2")
+                .offset(y: -190)
+        }
+    }
+}
+
+struct ListTitle: View {
+    var body: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text("Lists")
+                .fontWeight(.semibold)
+                .font(.system(size: 32))
+                .foregroundColor(Color.white)
+            
+            Rectangle()
+                .frame(width: 340, height: 2)
+                .foregroundColor(Color.white)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.leading, 20)
     }
 }

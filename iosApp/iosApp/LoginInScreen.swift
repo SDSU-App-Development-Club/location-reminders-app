@@ -27,7 +27,7 @@ struct LogInScreen: View {
                 BackgroundDetails()
                 
                 if logInButton {
-                    ReminderScreen()
+                   ListScreen()
                 } else {
                     
                     if signUpButton {
