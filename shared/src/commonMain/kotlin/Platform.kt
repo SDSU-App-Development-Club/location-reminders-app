@@ -64,9 +64,9 @@ class Result<V, E> private constructor(val ok: Boolean, private val value: V?, p
 
     fun <T> map(mapper: (V) -> T): Result<T, out E> {
         return if (this.ok) {
-            Result(true, mapper(this.value!!), null)
+            ok(mapper(this.value!!))
         } else {
-            Result(false, null, this.error!!)
+            error(this.error!!)
         }
     }
 
@@ -80,7 +80,7 @@ class Result<V, E> private constructor(val ok: Boolean, private val value: V?, p
         }
 
         fun <V, E> error(error: E): Result<V, E> {
-            return Result(true, null, error)
+            return Result(false, null, error)
         }
 
         fun <V, E> maybe(value: V?, error: E): Result<V, E> {
