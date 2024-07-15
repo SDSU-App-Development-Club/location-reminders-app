@@ -11,6 +11,7 @@ import swifties.testapp.dtos.LoginResponse.UserResponse;
 import swifties.testapp.dtos.LoginUserDto;
 import swifties.testapp.dtos.RegisterUserDto;
 import swifties.testapp.dtos.LoginResponse;
+import swifties.testapp.entity.Result;
 import swifties.testapp.entity.User;
 import swifties.testapp.services.AuthenticationService;
 import swifties.testapp.services.JwtService;
@@ -30,20 +31,20 @@ public class AuthenticationController {
     // Create account using email and password. Returns 409 if the account wasn't found
     @PostMapping("/signup")
     public ResponseEntity<LoginResponse> signup(@RequestBody RegisterUserDto registerUserDto) {
-        return authenticationService.signup(registerUserDto)
-                .map(this::login)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.CONFLICT).build());
+        return handleLoginResult(this.authenticationService.register(registerUserDto));
     }
 
     // Login with email and password
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginUserDto loginUserDto) {
-        return ResponseEntity.of(authenticationService.authenticate(loginUserDto).map(this::login));
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginUserDto loginUserDto) {
+        return handleLoginResult(this.authenticationService.login(loginUserDto));
     }
 
     // Return JWT with account details alongside it
-    private LoginResponse login(User user) {
-        return new LoginResponse(new UserResponse(user.getUserId(), user.getEmail()), jwtService.generateToken(user));
+    private ResponseEntity<LoginResponse> handleLoginResult(Result<User, HttpStatus> result) {
+        return result
+                .map(user -> new LoginResponse(new UserResponse(user.getUserId(), user.getEmail()), this.jwtService.generateToken(user)))
+                .map(ResponseEntity::ok)
+                .orElse(status -> ResponseEntity.status(status).build());
     }
 }
