@@ -36,11 +36,16 @@ object RestAPIAccess {
         return response.body()
     }
 
-    suspend fun attemptLogin(username: String, password: String): LoginResponse {
+    suspend fun attemptLogin(username: String, password: String): LoginResponse? {
         val response: HttpResponse = httpClient.post("$API_HOST/auth/login") {
             contentType(ContentType.Application.Json)
             setBody(SignupDto(username, password))
         }
+
+        if (response.status == HttpStatusCode.Forbidden) {
+            return null
+        }
+
         return response.body()
     }
 }
