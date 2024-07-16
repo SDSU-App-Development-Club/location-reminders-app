@@ -49,7 +49,10 @@ fun LogInScreen(
             buttonLabel = "Login",
             onButtonClick = { email, password ->
                 val loginResponse = RestAPIAccess.attemptLogin(email, password)
-                switchToDashboard(loginResponse.jwt)
+                if (loginResponse.ok) {
+                    switchToDashboard(loginResponse.value().jwt)
+                }
+
             }
         ) {
             SwitchCommand(
