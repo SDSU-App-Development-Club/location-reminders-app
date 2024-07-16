@@ -25,27 +25,71 @@ object RestAPIAccess {
         }
     }
 
-    suspend fun attemptSignup(username: String, password: String): LoginResponse? {
+    suspend fun attemptSignup(username: String, password: String): Result<LoginResponse, HttpStatusCode> {
         val response: HttpResponse = httpClient.post("$API_HOST/auth/signup") {
             contentType(ContentType.Application.Json)
             setBody(SignupDto(username, password))
         }
-        if (response.status == HttpStatusCode.Conflict) {
-            return null
+        return if (response.status == HttpStatusCode.OK) {
+            Result.ok(response.body())
+        } else {
+            Result.error(response.status)
         }
-        return response.body()
     }
 
-    suspend fun attemptLogin(username: String, password: String): LoginResponse? {
+    suspend fun attemptLogin(username: String, password: String): Result<LoginResponse, HttpStatusCode> {
         val response: HttpResponse = httpClient.post("$API_HOST/auth/login") {
             contentType(ContentType.Application.Json)
             setBody(SignupDto(username, password))
         }
 
-        if (response.status == HttpStatusCode.Forbidden) {
-            return null
+        return if (response.status == HttpStatusCode.OK) {
+            Result.ok(response.body())
+        } else {
+            Result.error(response.status)
+        }
+    }
+}
+
+// Copied from backend
+// For returning value or error to the platform-specific frontend easily
+// To use, check result.isOk() before accessing values
+class Result<V, E> private constructor(val ok: Boolean, private val value: V?, private val error: E?) {
+    fun value(): V {
+        return this.value ?: throw NullPointerException("This result is an error.")
+    }
+
+    fun error(): E {
+        return this.error ?: throw NullPointerException("This result is not an error.")
+    }
+
+    fun <T> map(mapper: (V) -> T): Result<T, out E> {
+        return if (this.ok) {
+            ok(mapper(this.value!!))
+        } else {
+            error(this.error!!)
+        }
+    }
+
+    fun orElse(defaultValue: (E) -> V): V {
+        return this.value ?: defaultValue(this.error!!)
+    }
+
+    companion object {
+        fun <V, E> ok(value: V): Result<V, E> {
+            return Result(true, value, null)
         }
 
-        return response.body()
+        fun <V, E> error(error: E): Result<V, E> {
+            return Result(false, null, error)
+        }
+
+        fun <V, E> maybe(value: V?, error: E): Result<V, E> {
+            return if (value != null) {
+                ok(value)
+            } else {
+                error(error)
+            }
+        }
     }
 }
