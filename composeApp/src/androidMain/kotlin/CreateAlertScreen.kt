@@ -43,7 +43,8 @@ fun CreateAlertScreen() {
     val notes = remember { mutableStateOf("") }
     var isEmojiPickerVisible by remember { mutableStateOf(false) }
     var selectedEmoji by remember { mutableStateOf(EmojiViewItem("", emptyList())) }
-
+    var selectedLocation by remember { mutableStateOf("Current") }
+    
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -165,10 +166,10 @@ fun LocationComponent() {
             horizontalArrangement = Arrangement.SpaceAround,
             modifier = Modifier.fillMaxWidth()
         ) {
-            LocationItem(iconRes = R.drawable.baseline_assistant_navigation_24, label = "Current")
-            LocationItem(iconRes = R.drawable.baseline_add_home_24, label = "Home")
-            LocationItem(iconRes = R.drawable.baseline_apartment_24, label = "Work")
-//            LocationItem(iconRes = R.drawable.ic_custom, label = "Custom")
+            LocationItem(iconRes = R.drawable.baseline_assistant_navigation_24, label = "Current", true)
+            LocationItem(iconRes = R.drawable.baseline_add_home_24, label = "Home", false)
+            LocationItem(iconRes = R.drawable.baseline_apartment_24, label = "Work", false)
+            LocationItem(iconRes = R.drawable.baseline_edit_24, label = "Custom", false)
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -187,7 +188,7 @@ fun LocationItem(iconRes: Int, label: String, isSelected: Boolean = false) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
         modifier = Modifier
-            .padding(16.dp)
+            .padding(10.dp)
             .background(if (isSelected) Color(53, 150, 59) else Color.LightGray, shape = RoundedCornerShape(8.dp))
             .width(60.dp) // Adjust the width as needed
             .height(60.dp)
