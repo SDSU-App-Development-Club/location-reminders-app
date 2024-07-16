@@ -42,6 +42,7 @@ object RestAPIAccess {
             contentType(ContentType.Application.Json)
             setBody(SignupDto(username, password))
         }
+
         return if (response.status == HttpStatusCode.OK) {
             Result.ok(response.body())
         } else {
