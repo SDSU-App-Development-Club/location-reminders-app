@@ -22,8 +22,15 @@ public class ApplicationConfiguration {
 
     @Bean
     UserDetailsService userDetailsService() {
-        return username -> userRepository.findByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return username -> {
+	    swifties.testapp.entity.User u = userRepository.findByEmail(username);
+
+	    if (u == null) {
+	        throw new UsernameNotFoundException("User not found");
+	    }
+
+	    return u;
+	};
     }
 
     @Bean
