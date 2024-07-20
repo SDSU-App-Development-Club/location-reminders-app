@@ -1,12 +1,9 @@
 package swifties.testapp.entity;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.sql.Timestamp;
 
 @Data
 @AllArgsConstructor
@@ -14,32 +11,29 @@ import java.sql.Timestamp;
 @Entity
 @Table(name = "alerts", schema = "public")
 public class Alert {
-    // Should we add JsonProperty???
+    // ID assigned so that client may specify an alert to delete
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "alert_id")
+    @Column
     private int alertId;
 
-    @JsonProperty(value = "location_name")
-    @Column(name = "location_name", nullable = false)
-    private String locationName;
+    // User who created this task
+    @Column(name = "userId")
+    private int userId;
 
-    @Column(name = "latitude", nullable = false)
-    private double latitude;
+    // name of task
+    @Column(name = "title", nullable = false)
+    private String title;
 
-    @Column(name = "longitude", nullable = false)
-    private double longitude;
+    // emoji icon of task
+    @Column(name = "emoji", nullable = false)
+    private String emoji;
 
-    @Column(name = "radius", nullable = false)
-    private int radius;
-
+    // note with a detailed description of task. should be limited to 560
     @Column(name = "message", nullable = false)
     private String message;
 
-    @Column(name = "active")
-    private boolean active;
-
-    @JsonProperty("created_at")
-    @Column(name = "created_at")
-    private Timestamp createdAt;
+    // the unique identifier for the physical location of the task for use in Google Places API
+    @Column(name = "placeId", nullable = false)
+    private String placeId;
 }

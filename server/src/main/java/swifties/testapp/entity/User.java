@@ -22,18 +22,18 @@ public class User implements UserDetails {
     // Should we add JsonProperty???
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
+    @Column(name = "userId")
     private int userId;
 
     @Column(name = "email", nullable = false)
     private String email;
 
     @JsonProperty(value = "password_hash")
-    @Column(name = "password_hash", nullable = false)
+    @Column(name = "passwordHash", nullable = false)
     private String passwordHash;
 
     @CreationTimestamp
-    @Column(name = "created_at")
+    @Column(name = "createdAt")
     private Timestamp createdAt;
 
     @Override
@@ -43,12 +43,12 @@ public class User implements UserDetails {
 
     @Override
     public String getPassword() {
-        return passwordHash;
+        return this.passwordHash;
     }
 
     @Override
     public String getUsername() {
-        return email;
+        return this.email;
     }
 
     @Override

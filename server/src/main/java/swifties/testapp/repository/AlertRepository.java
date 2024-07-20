@@ -1,16 +1,14 @@
 package swifties.testapp.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
-import swifties.testapp.dtos.LoginUserDto;
-import swifties.testapp.dtos.RegisterUserDto;
 import swifties.testapp.entity.Alert;
-import swifties.testapp.entity.User;
+
+import java.util.List;
 
 @Repository
 public interface AlertRepository extends JpaRepository<Alert, Integer> {
+    @Query("SELECT a FROM Alert a WHERE a.userId = :userId")
+    List<Alert> getAlertsForUser(int userId);
 }

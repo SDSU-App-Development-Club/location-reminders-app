@@ -1,6 +1,5 @@
 package swifties.testapp.configs;
 
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -10,6 +9,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import swifties.testapp.entity.User;
 import swifties.testapp.repository.UserRepository;
 
 @Configuration
@@ -22,8 +22,13 @@ public class ApplicationConfiguration {
 
     @Bean
     UserDetailsService userDetailsService() {
-        return username -> userRepository.findByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return username -> {
+            User u = userRepository.findByEmail(username);
+            if (u == null) {
+                throw new UsernameNotFoundException("User not found");
+            }
+            return u;
+        };
     }
 
     @Bean

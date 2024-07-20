@@ -1,8 +1,7 @@
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.client.request.post
-import io.ktor.client.request.setBody
+import io.ktor.client.request.*
 import io.ktor.client.statement.HttpResponse
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.json
@@ -14,6 +13,10 @@ data class UserResponse(val userId: Int, val email: String)
 data class LoginResponse(val user: UserResponse, val jwt: String)
 @Serializable
 data class SignupDto(val email: String, val password: String)
+@Serializable
+data class CreateAlertDto(val title: String, val emoji: String?, val message: String, val placeId: String)
+@Serializable
+data class AlertDto(val title: String, val emoji: String?, val message: String, val placeId: String, val alertId: Int)
 
 expect val API_HOST: String
 
@@ -48,6 +51,26 @@ object RestAPIAccess {
         } else {
             Result.error(response.status)
         }
+    }
+
+    suspend fun attemptCreateAlert(jwt: String, title: String, emoji: String?, message: String, placeId: String) {
+        val response: HttpResponse = httpClient.post("$API_HOST/alerts/create") {
+            bearerAuth(jwt)
+            setBody(CreateAlertDto(title, emoji, message, placeId))
+        }
+    }
+
+    suspend fun attemptGetAlerts(jwt: String): Result<List<AlertDto>, HttpStatusCode> {
+        val response: HttpResponse = httpClient.get("$API_HOST/alerts/get") {
+            bearerAuth(jwt)
+        }
+
+        if (response.status == HttpStatusCode.OK) {
+            println(response)
+        }
+
+        // todo
+        return Result.error(HttpStatusCode.BadGateway)
     }
 }
 
