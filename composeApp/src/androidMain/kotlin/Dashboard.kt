@@ -1,4 +1,5 @@
 
+import android.content.SharedPreferences
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.fadeIn
@@ -40,17 +41,17 @@ import androidx.compose.ui.unit.sp
 import swifties.testapp.R
 
 @Composable
-fun DashboardScreen() {
+fun DashboardScreen(prefs: SharedPreferences) {
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
         GradientImageView(resourceId = R.drawable.dashboard_page)
-        ScheduleScreen()
+        ScheduleScreen(prefs)
     }
 }
 
 @Composable
-fun ScheduleScreen() {
+fun ScheduleScreen(prefs: SharedPreferences) {
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -131,7 +132,7 @@ fun ScheduleScreen() {
 
                     )
 
-                    CreateAlertScreen()
+                    CreateAlertScreen(prefs)
                 }
                 FloatingActionButton(
                     onClick = {

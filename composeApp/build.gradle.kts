@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsCompose)
+
 }
 
 kotlin {
@@ -19,6 +20,8 @@ kotlin {
             implementation(libs.androidx.activity.compose)
             implementation(libs.androidx.navigation.compose)
             implementation(libs.androidx.ui.text.google.fonts)
+            implementation("com.google.android.gms:play-services-maps:19.0.0") // Google Maps
+            implementation("com.google.android.libraries.places:places:2.6.0") // Google Places
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -52,6 +55,7 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
@@ -80,6 +84,8 @@ dependencies {
     implementation(libs.volley)
     implementation("androidx.emoji2:emoji2-emojipicker:1.4.0-beta05")
     implementation(libs.androidx.material3.android)
+    implementation(libs.places)
+
 
 }
 
