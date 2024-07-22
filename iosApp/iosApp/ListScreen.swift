@@ -47,6 +47,12 @@ struct ListScreen: View {
                     Spacer()
                 }
                 .frame(maxHeight: 670)
+                
+                
+                //animation begins here
+//                NewTask()
+//                    .offset(y: UIScreen.main.bounds.height * 0.25) //y = 200 is at perfect spot
+//                
             }
         }
     }

@@ -31,7 +31,7 @@ struct ContentView_Previews: PreviewProvider {
 }
 
 //background details extracted subview
-struct ExtractedView: View {
+struct NewTitleView: View {
     var body: some View {
         VStack {
             Image("Welcome Page Squiggly 1")
