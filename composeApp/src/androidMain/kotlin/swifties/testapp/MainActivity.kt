@@ -12,10 +12,14 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         val prefs = application.getSharedPreferences("prefs", MODE_PRIVATE)
-        Places.initialize(applicationContext, "AIzaSyDR5tab5BEY3t5NzFSDsomEnN2QptmlJeo")
+        Places.initializeWithNewPlacesApiEnabled(
+            applicationContext,
+            "AIzaSyDR5tab5BEY3t5NzFSDsomEnN2QptmlJeo"
+        )
+        val placesClient = Places.createClient(this)
         setContent {
             MaterialTheme {
-                App(prefs)
+                App(prefs, placesClient)
             }
         }
     }
