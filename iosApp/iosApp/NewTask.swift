@@ -11,6 +11,7 @@ import SwiftUI
 struct NewTask: View {
     @State private var newTask: String = ""
     @State private var notes: String = ""
+    @State private var toggle = false
     
     var body: some View {
         
@@ -21,7 +22,7 @@ struct NewTask: View {
                 .shadow(color: Color.black.opacity(0.5), radius: 10)
                 .offset(y: UIScreen.main.bounds.height / 25)
             
-            NewTaskTitle()
+            NewTaskTitle(toggle: $toggle)
             
             //new task information
             VStack {
@@ -54,7 +55,7 @@ struct NewTask: View {
                             //custom address
                             CustomAddress()
                         }
-                      
+                        
                         
                         //divider rectangle
                         Rectangle()
@@ -74,6 +75,11 @@ struct NewTask: View {
                     .frame(height: UIScreen.main.bounds.height / 3.8)
                 
             }
+            
+            
+            if toggle {
+                ReminderScreen()
+            }
         }
     }
 }
@@ -84,43 +90,64 @@ struct NewTask: View {
 
 
 struct NewTaskTitle: View {
+    @Binding var toggle: Bool
+    
     var body: some View {
-        VStack(spacing: 0) { // Set spacing to 0 to remove gaps
-            HStack {
-                Image(systemName: "chevron.down")
-                    .foregroundColor(Color(hex: "FF009a88"))
-                    .fontWeight(.bold)
-                    .font(.system(size: 25))
+        ZStack {
+            VStack(spacing: 0) { // Set spacing to 0 to remove gaps
+                HStack {
+                    Image(systemName: "chevron.down")
+                        .foregroundColor(Color(hex: "FF009a88"))
+                        .fontWeight(.bold)
+                        .font(.system(size: 25))
+                        .onTapGesture {
+                            withAnimation(.easeInOut){
+                                toggle.toggle()
+                            }
+                        }
+                    
+                    Spacer()
+                    
+                    Text("New Task __")
+                        .font(.headline)
+                    
+                    Spacer()
+                    
+                    
+                    // TODO: turn this into a button that saves the new task
+                    Image(systemName: "plus")
+                        .foregroundColor(.white)
+                        .padding(8)
+                        .background(Color(hex: "FF009a88"))
+                        .fontWeight(.bold)
+                        .clipShape(Circle())
+                }
+                .offset(y: UIScreen.main.bounds.height / 30)
+                .padding(20)
                 
                 Spacer()
+                    .frame(height: 20)
                 
-                Text("New Task __")
-                    .font(.headline)
+                Rectangle()
+                    .foregroundColor(Color(hex: "#D9D9D9"))
+                    .frame(height: 3)
                 
-                Spacer()
-                
-                Image(systemName: "plus")
-                    .foregroundColor(.white)
-                    .padding(8)
-                    .background(Color(hex: "FF009a88"))
-                    .fontWeight(.bold)
-                    .clipShape(Circle())
+                Rectangle()
+                    .foregroundColor(Color(hex: "EEEEEE"))
+                    .ignoresSafeArea(.all)
             }
-            .offset(y: UIScreen.main.bounds.height / 30)
-            .padding()
             
-            Spacer()
-                .frame(height: 20)
+
             
-            Rectangle()
-                .foregroundColor(Color(hex: "#D9D9D9"))
-                .frame(height: 3)
-            
-            Rectangle()
-                .foregroundColor(Color(hex: "EEEEEE"))
-                .ignoresSafeArea(.all)
         }
+        
+        
+        
+        
+        
     }
+    
+    
 }
 
 struct EmojiAndTitle: View {
