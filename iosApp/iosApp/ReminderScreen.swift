@@ -10,6 +10,7 @@ import SwiftUI
 
 struct ReminderScreen: View {
     @State private var isClicked = false
+    @State private var slideOffset: CGFloat = UIScreen.main.bounds.height
     
     var body: some View {
         ZStack {
@@ -42,9 +43,11 @@ struct ReminderScreen: View {
                 
             }
             .padding(.top, 20)
+            .offset(y: isClicked ? -slideOffset : 0)
             
             
-            
+            NewTask()
+                .offset(y: isClicked ? 0 : slideOffset)
             
             
             ZStack {
@@ -60,11 +63,7 @@ struct ReminderScreen: View {
                     .foregroundColor(.white)
                     .offset(y: UIScreen.main.bounds.height / 1.2)
                     .shadow(color: Color.black.opacity(0.5), radius: 10)
-                
-                
-               
-                   
-                
+                       
                 ZStack {
                     Circle()
                         .foregroundStyle(.white)
@@ -83,22 +82,15 @@ struct ReminderScreen: View {
                 }
                 .offset(x: UIScreen.main.bounds.width / 2.5, y: UIScreen.main.bounds.height / 2.55)
                 .onTapGesture {
-                    withAnimation(.easeInOut){
+                    withAnimation(.easeInOut(duration: 0.5)){
                         isClicked.toggle()
                     }
                 }
 
                 
             }
-            
-            if isClicked{
-                NewTask()
-                
-            }
-            
-            
-            
-            
+            .opacity(isClicked ? 0 : 1)
+   
         }
         
     }
