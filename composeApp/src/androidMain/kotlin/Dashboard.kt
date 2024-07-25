@@ -38,20 +38,26 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.google.android.libraries.places.api.net.PlacesClient
 import swifties.testapp.R
 
 @Composable
-fun DashboardScreen(prefs: SharedPreferences) {
+fun DashboardScreen(prefs: SharedPreferences, placesClient: PlacesClient, navController: NavController) {
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
         GradientImageView(resourceId = R.drawable.dashboard_page)
-        ScheduleScreen(prefs)
+        ScheduleScreen(prefs, placesClient, navController)
     }
 }
 
 @Composable
-fun ScheduleScreen(prefs: SharedPreferences) {
+fun ScheduleScreen(
+    prefs: SharedPreferences,
+    placesClient: PlacesClient,
+    navController: NavController
+) {
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -132,7 +138,7 @@ fun ScheduleScreen(prefs: SharedPreferences) {
 
                     )
 
-                    CreateAlertScreen(prefs)
+                    CreateAlertScreen(prefs, placesClient, navController)
                 }
                 FloatingActionButton(
                     onClick = {

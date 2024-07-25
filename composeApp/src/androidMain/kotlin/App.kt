@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.google.android.libraries.places.api.net.PlacesClient
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 const val SIGNUP_SCREEN_ROUTE = "signup_screen"
@@ -14,7 +15,7 @@ const val DASHBOARD_SCREEN_ROUTE = "dashboard_screen"
 
 @Composable
 @Preview
-fun App(prefs: SharedPreferences) {
+fun App(prefs: SharedPreferences, placesClient: PlacesClient) {
     val navController: NavHostController = rememberNavController()
     val storedJwt = prefs.getString("jwt", null)
 
@@ -31,7 +32,7 @@ fun App(prefs: SharedPreferences) {
         }
         composable("$DASHBOARD_SCREEN_ROUTE/{token}") { backStackEntry ->
             val userId: String = backStackEntry.arguments?.getString("token")!!
-            DashboardScreen(prefs)
+            DashboardScreen(prefs, placesClient, navController)
         }
     }
 
