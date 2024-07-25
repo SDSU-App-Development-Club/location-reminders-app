@@ -2,7 +2,6 @@
 import android.content.SharedPreferences
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,13 +14,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableIntState
@@ -34,7 +30,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
@@ -42,10 +37,16 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.emoji2.emojipicker.EmojiPickerView
 import androidx.emoji2.emojipicker.EmojiViewItem
+import androidx.navigation.NavController
+import com.google.android.libraries.places.api.net.PlacesClient
 import swifties.testapp.R
 
 @Composable
-fun CreateAlertScreen(prefs: SharedPreferences) {
+fun CreateAlertScreen(
+    prefs: SharedPreferences,
+    placesClient: PlacesClient,
+    navController: NavController
+) {
     val interactionSource = remember { MutableInteractionSource() }
     val taskName = remember { mutableStateOf("") }
     val notes = remember { mutableStateOf("") }
@@ -55,13 +56,15 @@ fun CreateAlertScreen(prefs: SharedPreferences) {
     var selectedLocation by selectedLocationState
     val placeIdState = remember { mutableStateOf("") }
     var placeId by placeIdState
+    var showMapPopupState = remember { mutableStateOf(false) }
+    var showMapPopup by showMapPopupState
 
     Column(
         modifier = Modifier
             .fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
-        Column(
+       /* Column(
             modifier = Modifier
                 .clickable (
                     interactionSource = interactionSource,
@@ -143,8 +146,7 @@ fun CreateAlertScreen(prefs: SharedPreferences) {
             ) {
             }
 
-            LocationComponent(selectedLocationState, placeIdState, prefs)
-
+            LocationComponent(selectedLocationState, placeIdState, prefs, showMapPopupState)
 
         }
         if (isEmojiPickerVisible) {
@@ -154,7 +156,8 @@ fun CreateAlertScreen(prefs: SharedPreferences) {
                     isEmojiPickerVisible = false // Close picker after selection
                 }
             )
-        }
+        } */
+        LocationMapScreen(placesClient, placeIdState, navController)
     }
 
 }
@@ -176,7 +179,12 @@ fun EmojiPicker(onEmojiSelected: (EmojiViewItem) -> Unit) {
 }
 
 @Composable
-fun LocationComponent(selectedLocationState: MutableIntState, placeIdState: MutableState<String>, prefs: SharedPreferences) {
+fun LocationComponent(
+    selectedLocationState: MutableIntState,
+    placeIdState: MutableState<String>,
+    prefs: SharedPreferences,
+    showMapPopupState: MutableState<Boolean>
+) {
     Column(
         modifier = Modifier
             .padding(16.dp)
@@ -194,7 +202,8 @@ fun LocationComponent(selectedLocationState: MutableIntState, placeIdState: Muta
                 i = 0,
                 selectedLocationState,
                 placeIdState,
-                prefs
+                prefs,
+                showMapPopupState
             )
             LocationItem(
                 iconRes = R.drawable.baseline_add_home_24,
@@ -202,7 +211,8 @@ fun LocationComponent(selectedLocationState: MutableIntState, placeIdState: Muta
                 i = 1,
                 selectedLocationState,
                 placeIdState,
-                prefs
+                prefs,
+                showMapPopupState
             )
             LocationItem(
                 iconRes = R.drawable.baseline_apartment_24,
@@ -210,7 +220,8 @@ fun LocationComponent(selectedLocationState: MutableIntState, placeIdState: Muta
                 i = 2,
                 selectedLocationState,
                 placeIdState,
-                prefs
+                prefs,
+                showMapPopupState
             )
             LocationItem(
                 iconRes = R.drawable.baseline_edit_24,
@@ -218,7 +229,8 @@ fun LocationComponent(selectedLocationState: MutableIntState, placeIdState: Muta
                 i = 3,
                 selectedLocationState,
                 placeIdState,
-                prefs
+                prefs,
+                showMapPopupState
             )
         }
 
@@ -234,7 +246,15 @@ fun LocationComponent(selectedLocationState: MutableIntState, placeIdState: Muta
 }
 
 @Composable
-fun LocationItem(iconRes: Int, label: String, i: Int, selectedLocationState: MutableIntState, placeIdState: MutableState<String>, prefs: SharedPreferences) {
+fun LocationItem(
+    iconRes: Int,
+    label: String,
+    i: Int,
+    selectedLocationState: MutableIntState,
+    placeIdState: MutableState<String>,
+    prefs: SharedPreferences,
+    showMapPopupState: MutableState<Boolean>
+) {
     var isSelected by selectedLocationState
     Box()
     {
@@ -243,12 +263,14 @@ fun LocationItem(iconRes: Int, label: String, i: Int, selectedLocationState: Mut
                 .size(60.dp),
             onClick = {
                 isSelected = i;
-                placeIdState.value = prefs.getString(label, "") ?: ""
+                placeIdState.value = prefs.getString(label, "") ?: "";
+                showMapPopupState.value = !showMapPopupState.value;
             },
             colors = ButtonDefaults.buttonColors(
                 backgroundColor = Color.Transparent,
                 contentColor = Color.Transparent
-            )
+            ),
+
         ) {}
 
         Column(
