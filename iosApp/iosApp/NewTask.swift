@@ -12,6 +12,7 @@ struct NewTask: View {
     @State private var newTask: String = ""
     @State private var notes: String = ""
     @State private var toggle = false
+    @Binding var isVisible: Bool
     
     var body: some View {
         
@@ -22,7 +23,7 @@ struct NewTask: View {
                 .shadow(color: Color.black.opacity(0.5), radius: 10)
                 .offset(y: UIScreen.main.bounds.height / 25)
             
-            NewTaskTitle(toggle: $toggle)
+            NewTaskTitle(toggle: $toggle, isVisible: $isVisible)
             
             //new task information
             VStack {
@@ -85,12 +86,14 @@ struct NewTask: View {
 }
 
 #Preview {
-    NewTask()
+    @State var isVisible = true
+        return NewTask(isVisible: $isVisible)
 }
 
 
 struct NewTaskTitle: View {
     @Binding var toggle: Bool
+    @Binding var isVisible: Bool
     
     var body: some View {
         ZStack {
@@ -101,11 +104,10 @@ struct NewTaskTitle: View {
                         .fontWeight(.bold)
                         .font(.system(size: 25))
                         .onTapGesture {
-                            withAnimation(.easeInOut){
-                                toggle.toggle()
+                            withAnimation(.easeInOut(duration: 0.5)) {
+                                isVisible = false
                             }
                         }
-                    
                     Spacer()
                     
                     Text("New Task __")
