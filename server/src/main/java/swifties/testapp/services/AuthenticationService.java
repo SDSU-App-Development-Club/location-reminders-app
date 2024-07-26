@@ -17,7 +17,9 @@ import swifties.testapp.repository.UserRepository;
 
 @Service
 public class AuthenticationService {
+    // requires valid LOWERCASE emails
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$");
+    // At least 8 characters long, including at least 1 lowercase character, 1 uppercase character, 1 numeric character, 1 non-alphanumeric character
     private static final Pattern PASSWORD_PATTERN = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z0-9]).{8,}$");
 
     private final UserRepository userRepository;
@@ -37,11 +39,10 @@ public class AuthenticationService {
         if (this.userRepository.existsByEmail(email)) {
             return Result.error(HttpStatus.CONFLICT);
         } else {
-            String password = input.getPassword();
-            if (EMAIL_PATTERN.matcher(email).matches() && PASSWORD_PATTERN.matcher(password).matches()) {
+            if (EMAIL_PATTERN.matcher(email).matches()) {
                 User user = new User()
                         .setEmail(email)
-                        .setPasswordHash(this.passwordEncoder.encode(password));
+                        .setPasswordHash(this.passwordEncoder.encode(input.getPassword()));
 
                 return Result.ok(this.userRepository.save(user));
             } else {
