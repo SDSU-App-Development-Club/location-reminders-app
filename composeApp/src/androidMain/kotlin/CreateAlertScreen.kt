@@ -157,9 +157,8 @@ fun CreateAlertScreen(
                 }
             )
         } */
-        LocationMapScreen(placesClient, placeIdState, navController)
+        LocationMapScreen(prefs, placesClient, placeIdState, navController)
     }
-
 }
 
 @Composable

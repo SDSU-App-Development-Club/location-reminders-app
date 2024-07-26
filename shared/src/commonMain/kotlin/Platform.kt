@@ -16,9 +16,11 @@ data class LoginResponse(val user: UserResponse, val jwt: String)
 @Serializable
 data class SignupDto(val email: String, val password: String)
 @Serializable
-data class CreateAlertDto(val title: String, val emoji: String?, val message: String, val placeId: String)
-@Serializable
 data class AlertDto(val title: String, val emoji: String?, val message: String, val placeId: String, val alertId: Int)
+@Serializable
+data class PlaceDto(val placeId: String, val fullText: String)
+@Serializable
+data class PlaceDetailsDto(val latitude: Double, val longitude: Double)
 
 expect val API_HOST: String
 
@@ -53,6 +55,9 @@ object RestAPIAccess {
     }
 
     suspend fun attemptCreateAlert(jwt: String, title: String, emoji: String?, message: String, placeId: String) {
+        @Serializable
+        data class CreateAlertDto(val title: String, val emoji: String?, val message: String, val placeId: String)
+
         val response: HttpResponse = httpClient.post("$API_HOST/alerts/create") {
             bearerAuth(jwt)
             setBody(CreateAlertDto(title, emoji, message, placeId))
@@ -71,6 +76,22 @@ object RestAPIAccess {
         // todo
         return Result.error(HttpStatusCode.BadGateway)
     }
+
+    suspend fun fetchPlacePredictions(jwt: String, query: String): Result<List<PlaceDto>, HttpStatusCode> {
+        val response: HttpResponse = httpClient.post("$API_HOST/maps/autocomplete") {
+            bearerAuth(jwt)
+            parameter("query", query)
+        }
+
+        return wrapResponse(response)
+    }
+    /*
+        suspend fun fetchPlaceDetails(jwt: String, placeId: String): PlaceDetailsDto? {
+            val response: HttpResponse = httpClient.get("$API_HOST/maps/details") {
+                bearerAuth(jwt)
+            }
+        }*/
+
     private suspend inline fun <reified T> wrapResponse(response: HttpResponse): Result<T, HttpStatusCode> {
         return if (response.status == HttpStatusCode.OK) {
             Result.ok(response.body())

@@ -1,5 +1,6 @@
 
 import android.annotation.SuppressLint
+import android.content.SharedPreferences
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -21,6 +22,7 @@ import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -46,27 +48,39 @@ import kotlinx.coroutines.launch
 
 @SuppressLint("UnrememberedMutableState")
 @Composable
-fun LocationMapScreen(placesClient: PlacesClient, placeIdState: MutableState<String>, navController: NavController,) {
-
+fun LocationMapScreen(
+    prefs: SharedPreferences,
+    placesClient: PlacesClient,
+    placeIdState: MutableState<String>,
+    navController: NavController,
+) {
     var query by remember { mutableStateOf("") }
     var predictions by remember { mutableStateOf(listOf<AutocompletePrediction>()) }
     var selectedLocation by remember { mutableStateOf<LatLng?>(null) }
-    var radius by remember { mutableStateOf(1000.0) } // Initial radius value in meters
+    var radius by remember { mutableDoubleStateOf(1000.0) } // Initial radius value in meters
     val cameraPositionState = rememberCameraPositionState()
 
     val coroutineScope = rememberCoroutineScope()
+    // todo test that this is forgotten in the case of expired JWTs
+    // use remember to avoid re-getting the JWT everytime the screen recomposes
+    val jwt = remember { prefs.getString("jwt", null)!! }
 
-    Column(modifier = Modifier
-        .fillMaxWidth()
-        .padding(16.dp)) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+    ) {
         TextField(
             value = query,
             onValueChange = {
                 query = it
                 if (query.isNotEmpty()) {
-                    fetchPlacePredictions(query, placesClient) { fetchedPredictions ->
-                        predictions = fetchedPredictions
+                    coroutineScope.launch {
+                        RestAPIAccess.fetchPlacePredictions(jwt, query)
                     }
+                    //fetchPlacePredictions(query, placesClient) { fetchedPredictions ->
+                    //    predictions = fetchedPredictions
+                    //}
                 } else {
                     predictions = emptyList()
                 }
@@ -98,12 +112,17 @@ fun LocationMapScreen(placesClient: PlacesClient, placeIdState: MutableState<Str
                             .fillMaxWidth()
                             .clickable {
                                 placeIdState.value = prediction.placeId
-                                query = prediction.getFullText(null).toString()
+                                query = prediction
+                                    .getFullText(null)
+                                    .toString()
                                 fetchPlaceDetails(prediction.placeId, placesClient) { latLng ->
                                     selectedLocation = latLng
                                     coroutineScope.launch {
                                         cameraPositionState.animate(
-                                            CameraUpdateFactory.newLatLngZoom(latLng, 15f)
+                                            CameraUpdateFactory.newLatLngZoom(
+                                                latLng,
+                                                15f
+                                            )
                                         )
                                     }
                                     predictions = emptyList() // Clear predictions after selection
