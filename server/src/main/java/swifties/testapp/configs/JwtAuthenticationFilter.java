@@ -40,18 +40,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String jwt = authHeader.substring(7);
 
             if (this.jwtService.isTokenValid(jwt)) {
-                String userEmail = this.jwtService.extractUsername(jwt);
+                String userId = this.jwtService.extractUsername(jwt);
                 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-                if (userEmail != null && authentication == null) {
-                    UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
+                if (userId != null && authentication == null) {
+                    UserDetails userDetails = this.userDetailsService.loadUserByUsername(userId);
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
                     authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authToken);
                     filterChain.doFilter(request, response);
                 } else {
-                    this.logger.error("Error making authentication, details: (userEmail = " + userEmail + ", authentication = " + authentication + ")");
+                    this.logger.error("Error making authentication, details: (userEmail = " + userId + ", authentication = " + authentication + ")");
                     response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                     response.getWriter().write("Error processing JWT");
                 }
@@ -62,6 +62,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         } catch (Exception exception) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().write("Error processing JWT");
+            this.logger.error("Error processing JWT", exception);
         }
     }
 }
