@@ -15,6 +15,8 @@ public final class Result<V, E> {
     private final E error;
 
     private Result(boolean ok, @Nullable V value, @Nullable E error) {
+        Objects.requireNonNull(ok ? value : error);
+
         this.ok = ok;
         this.value = value;
         this.error = error;
@@ -25,7 +27,7 @@ public final class Result<V, E> {
     }
 
     public static <V, E> Result<V, E> error(E error) {
-        return new Result<>(true, null, error);
+        return new Result<>(false, null, error);
     }
 
     public static <V, E> Result<V, E> maybe(@Nullable V value, E error) {
