@@ -73,7 +73,12 @@ CREATE TABLE IF NOT EXISTS users
 );
 EOSQL
 
-echo "Tables created. Shutting down docker..."
+echo "Tables created. Running migrations..."
+
+./migration-7-20-2024.sh
+./migration-7-28-2024.sh
+
+echo "All migrations complete. Shutting down docker..."
 
 docker compose down
 
