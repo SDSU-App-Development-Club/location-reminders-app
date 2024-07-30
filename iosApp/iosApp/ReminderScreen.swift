@@ -25,7 +25,7 @@ struct ReminderScreen: View {
             
             VStack {
                 RemindersTitle() // TODO: Adjust padding to match the spacing in the screenshot
-                    .padding(.top, 60)
+                    .padding(.top, 30)
                 
                 Spacer()
                     .frame(height: 50)
@@ -43,7 +43,7 @@ struct ReminderScreen: View {
                 Spacer()
                 
             }
-            .padding(.top, 20)
+            //.padding(.top, 20)
             .offset(y: isNewTaskVisible ? -slideOffset : 0)
             
             

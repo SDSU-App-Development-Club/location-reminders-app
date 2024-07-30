@@ -25,7 +25,7 @@ public final class Result<V, E> {
     }
 
     public static <V, E> Result<V, E> error(E error) {
-        return new Result<>(true, null, error);
+        return new Result<>(false, null, error);
     }
 
     public static <V, E> Result<V, E> maybe(@Nullable V value, E error) {
