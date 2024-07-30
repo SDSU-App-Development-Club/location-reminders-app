@@ -53,7 +53,7 @@ public class AuthenticationService {
     public Result<User, HttpStatus> login(LoginUserDto input) {
         String email = input.getEmail();
 
-        if (EMAIL_PATTERN.matcher(email).matches() && PASSWORD_PATTERN.matcher(input.getPassword()).matches()) {
+        if (EMAIL_PATTERN.matcher(email).matches()) {
             try {
                 this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, input.getPassword()));
             } catch (AuthenticationException exception) {

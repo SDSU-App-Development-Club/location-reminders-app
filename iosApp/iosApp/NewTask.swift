@@ -73,7 +73,7 @@ struct NewTask: View {
                 }.padding(.horizontal)
                 
                 Spacer()
-                    .frame(height: UIScreen.main.bounds.height / 3.8)
+                    .frame(height: UIScreen.main.bounds.height / 4)
                 
             }
             
