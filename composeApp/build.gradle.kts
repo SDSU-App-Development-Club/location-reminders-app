@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidApplication)
@@ -41,12 +43,17 @@ android {
     sourceSets["main"].res.srcDirs("src/androidMain/res")
     sourceSets["main"].resources.srcDirs("src/commonMain/resources")
 
+    // read from .env
+    val dotEnv = Properties()
+    dotEnv.load(rootProject.file(".env").inputStream())
+
     defaultConfig {
         applicationId = "swifties.testapp"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
+        manifestPlaceholders.put("MAPS_API_KEY", dotEnv.getProperty("MAPS_API_KEY"))
     }
     packaging {
         resources {
