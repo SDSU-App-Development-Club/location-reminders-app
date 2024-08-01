@@ -1,6 +1,7 @@
 package swifties.testapp
 
 import App
+import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -12,11 +13,12 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         val prefs = application.getSharedPreferences("prefs", MODE_PRIVATE)
-        Places.initializeWithNewPlacesApiEnabled(
-            applicationContext,
-            "AIzaSyDR5tab5BEY3t5NzFSDsomEnN2QptmlJeo"
-        )
+
+        val applicationInfo = packageManager.getApplicationInfo(packageName, PackageManager.GET_META_DATA)
+        val apiKey = applicationInfo.metaData.getString("com.google.android.geo.API_KEY")
+        Places.initializeWithNewPlacesApiEnabled(applicationContext, apiKey!!)
         val placesClient = Places.createClient(this)
+
         setContent {
             MaterialTheme {
                 App(prefs, placesClient)

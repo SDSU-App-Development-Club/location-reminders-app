@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.client.RestTemplate;
 import swifties.testapp.entity.User;
 import swifties.testapp.repository.UserRepository;
 
@@ -25,7 +26,7 @@ public class ApplicationConfiguration {
         return username -> {
             User u = userRepository.findByEmail(username);
             if (u == null) {
-                throw new UsernameNotFoundException("User not found");
+                throw new UsernameNotFoundException("User not found: " + username);
             }
             return u;
         };
@@ -34,6 +35,11 @@ public class ApplicationConfiguration {
     @Bean
     BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
     }
 
     @Bean

@@ -14,11 +14,11 @@ public class Alert {
     // ID assigned so that client may specify an alert to delete
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
+    @Column(name = "alert_id")
     private int alertId;
 
     // User who created this task
-    @Column(name = "userId")
+    @Column(name = "user_id")
     private int userId;
 
     // name of task
@@ -34,6 +34,6 @@ public class Alert {
     private String message;
 
     // the unique identifier for the physical location of the task for use in Google Places API
-    @Column(name = "placeId", nullable = false)
+    @Column(name = "place_id", nullable = false)
     private String placeId;
 }
