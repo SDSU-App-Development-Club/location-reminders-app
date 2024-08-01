@@ -5,6 +5,8 @@ import io.ktor.client.request.*
 import io.ktor.client.statement.HttpResponse
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.json
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -14,9 +16,11 @@ data class LoginResponse(val user: UserResponse, val jwt: String)
 @Serializable
 data class SignupDto(val email: String, val password: String)
 @Serializable
-data class CreateAlertDto(val title: String, val emoji: String?, val message: String, val placeId: String)
-@Serializable
 data class AlertDto(val title: String, val emoji: String?, val message: String, val placeId: String, val alertId: Int)
+@Serializable
+data class PlaceDto(val placeId: String, val fullText: String)
+@Serializable
+data class PlaceDetailsDto(val latitude: Double, val longitude: Double)
 
 expect val API_HOST: String
 
@@ -28,16 +32,17 @@ object RestAPIAccess {
         }
     }
 
+    // Tells the API access what to do when it gets an invalid JWT. Runs on the main thread.
+    // Set this from your frontend entry point.
+    var invalidJwtCallback: () -> Unit = {}
+
     suspend fun attemptSignup(username: String, password: String): Result<LoginResponse, HttpStatusCode> {
         val response: HttpResponse = httpClient.post("$API_HOST/auth/signup") {
             contentType(ContentType.Application.Json)
             setBody(SignupDto(username, password))
         }
-        return if (response.status == HttpStatusCode.OK) {
-            Result.ok(response.body())
-        } else {
-            Result.error(response.status)
-        }
+
+        return wrapResponse(response)
     }
 
     suspend fun attemptLogin(username: String, password: String): Result<LoginResponse, HttpStatusCode> {
@@ -46,14 +51,13 @@ object RestAPIAccess {
             setBody(SignupDto(username, password))
         }
 
-        return if (response.status == HttpStatusCode.OK) {
-            Result.ok(response.body())
-        } else {
-            Result.error(response.status)
-        }
+        return wrapResponse(response)
     }
 
     suspend fun attemptCreateAlert(jwt: String, title: String, emoji: String?, message: String, placeId: String) {
+        @Serializable
+        data class CreateAlertDto(val title: String, val emoji: String?, val message: String, val placeId: String)
+
         val response: HttpResponse = httpClient.post("$API_HOST/alerts/create") {
             bearerAuth(jwt)
             setBody(CreateAlertDto(title, emoji, message, placeId))
@@ -71,6 +75,20 @@ object RestAPIAccess {
 
         // todo
         return Result.error(HttpStatusCode.BadGateway)
+    }
+
+    private suspend inline fun <reified T> wrapResponse(response: HttpResponse): Result<T, HttpStatusCode> {
+        return if (response.status == HttpStatusCode.OK) {
+            Result.ok(response.body())
+        } else {
+            if (response.status == HttpStatusCode.Gone) {
+                // run on the main thread, since navController requires main thread
+                withContext(Dispatchers.Main) {
+                    invalidJwtCallback()
+                }
+            }
+            Result.error(response.status)
+        }
     }
 }
 

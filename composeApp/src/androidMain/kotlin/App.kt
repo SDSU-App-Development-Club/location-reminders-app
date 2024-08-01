@@ -19,6 +19,16 @@ fun App(prefs: SharedPreferences, placesClient: PlacesClient) {
     val navController: NavHostController = rememberNavController()
     val storedJwt = prefs.getString("jwt", null)
 
+    RestAPIAccess.invalidJwtCallback = {
+        // go back to login screen
+        navController.navigate(LOGIN_SCREEN_ROUTE)
+
+        // delete the expired token
+        prefs.edit()
+            .remove("jwt")
+            .apply()
+    }
+
     NavHost(
         navController = navController,
         startDestination = SIGNUP_SCREEN_ROUTE,
@@ -30,13 +40,12 @@ fun App(prefs: SharedPreferences, placesClient: PlacesClient) {
         composable(LOGIN_SCREEN_ROUTE) {
             LogInScreen(goToDashboard(prefs, navController)) { navController.navigate(SIGNUP_SCREEN_ROUTE) }
         }
-        composable("$DASHBOARD_SCREEN_ROUTE/{token}") { backStackEntry ->
-            val userId: String = backStackEntry.arguments?.getString("token")!!
+        composable("$DASHBOARD_SCREEN_ROUTE/{token}") {
             DashboardScreen(prefs, placesClient, navController)
         }
     }
 
-    // Add check to see if token is expired
+    // todo add check to see if token is expired (should probably use a new endpoint)
     if (storedJwt != null) {
         navController.navigate("$DASHBOARD_SCREEN_ROUTE/$storedJwt")
     }
