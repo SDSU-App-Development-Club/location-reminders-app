@@ -61,9 +61,6 @@ fun LocationMapScreen(
     val cameraPositionState = rememberCameraPositionState()
 
     val coroutineScope = rememberCoroutineScope()
-    // todo test that this is forgotten in the case of expired JWTs
-    // use remember to avoid re-getting the JWT everytime the screen recomposes
-    val jwt = remember { prefs.getString("jwt", null)!! }
 
     Column(
         modifier = Modifier
@@ -75,12 +72,9 @@ fun LocationMapScreen(
             onValueChange = {
                 query = it
                 if (query.isNotEmpty()) {
-                    coroutineScope.launch {
-                        RestAPIAccess.fetchPlacePredictions(jwt, query)
+                    fetchPlacePredictions(query, placesClient) { fetchedPredictions ->
+                        predictions = fetchedPredictions
                     }
-                    //fetchPlacePredictions(query, placesClient) { fetchedPredictions ->
-                    //    predictions = fetchedPredictions
-                    //}
                 } else {
                     predictions = emptyList()
                 }

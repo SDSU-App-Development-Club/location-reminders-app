@@ -77,21 +77,6 @@ object RestAPIAccess {
         return Result.error(HttpStatusCode.BadGateway)
     }
 
-    suspend fun fetchPlacePredictions(jwt: String, query: String): Result<List<PlaceDto>, HttpStatusCode> {
-        val response: HttpResponse = httpClient.post("$API_HOST/maps/autocomplete") {
-            bearerAuth(jwt)
-            parameter("query", query)
-        }
-
-        return wrapResponse(response)
-    }
-    /*
-        suspend fun fetchPlaceDetails(jwt: String, placeId: String): PlaceDetailsDto? {
-            val response: HttpResponse = httpClient.get("$API_HOST/maps/details") {
-                bearerAuth(jwt)
-            }
-        }*/
-
     private suspend inline fun <reified T> wrapResponse(response: HttpResponse): Result<T, HttpStatusCode> {
         return if (response.status == HttpStatusCode.OK) {
             Result.ok(response.body())
