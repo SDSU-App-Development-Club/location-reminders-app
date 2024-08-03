@@ -8,6 +8,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowColumnScopeInstance.align
+import androidx.compose.foundation.layout.FlowRowScopeInstance.align
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -63,6 +65,7 @@ fun ScheduleScreen(
     ) {
         var showPopup by remember { mutableStateOf(false) }
 
+        // "Today" header and list
         AnimatedVisibility(
             visible = !showPopup,
             enter = fadeIn(),
@@ -150,6 +153,7 @@ fun ScheduleScreen(
                     shape = CircleShape,
                     modifier = Modifier
                         .size(64.dp)
+                        .align(Alignment.End)
                         .border(6.dp, Color.White, CircleShape),
                 ) {
                     Icon(Icons.Default.Add, contentDescription = "Add Task")
