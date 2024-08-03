@@ -61,14 +61,16 @@ object RestAPIAccess {
         return response.status == HttpStatusCode.OK
     }
 
-    suspend fun attemptCreateAlert(jwt: String, title: String, emoji: String?, message: String, placeId: String) {
+    suspend fun attemptCreateAlert(jwt: String, title: String, emoji: String, message: String, placeId: String): Result<Any?, HttpStatusCode> {
         @Serializable
-        data class CreateAlertDto(val title: String, val emoji: String?, val message: String, val placeId: String)
+        data class CreateAlertDto(val title: String, val emoji: String, val message: String, val placeId: String)
 
         val response: HttpResponse = httpClient.post("$API_HOST/alerts/create") {
             bearerAuth(jwt)
             setBody(CreateAlertDto(title, emoji, message, placeId))
         }
+
+        return wrapResponse(response)
     }
 
     suspend fun attemptGetAlerts(jwt: String): Result<List<AlertDto>, HttpStatusCode> {
@@ -76,12 +78,7 @@ object RestAPIAccess {
             bearerAuth(jwt)
         }
 
-        if (response.status == HttpStatusCode.OK) {
-            println(response)
-        }
-
-        // todo
-        return Result.error(HttpStatusCode.BadGateway)
+        return wrapResponse(response)
     }
 
     private suspend inline fun <reified T> wrapResponse(response: HttpResponse): Result<T, HttpStatusCode> {

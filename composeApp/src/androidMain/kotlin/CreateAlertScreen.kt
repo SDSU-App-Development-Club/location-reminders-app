@@ -1,7 +1,7 @@
-
 import android.content.SharedPreferences
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,10 +14,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
+import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableIntState
@@ -30,6 +33,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
@@ -64,9 +68,9 @@ fun CreateAlertScreen(
             .fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
-       /* Column(
+        Column(
             modifier = Modifier
-                .clickable (
+                .clickable(
                     interactionSource = interactionSource,
                     indication = null
                 ) { isEmojiPickerVisible = false }
@@ -156,7 +160,7 @@ fun CreateAlertScreen(
                     isEmojiPickerVisible = false // Close picker after selection
                 }
             )
-        } */
+        }
         LocationMapScreen(prefs, placesClient, placeIdState, navController)
     }
 }
@@ -270,7 +274,7 @@ fun LocationItem(
                 contentColor = Color.Transparent
             ),
 
-        ) {}
+            ) {}
 
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
