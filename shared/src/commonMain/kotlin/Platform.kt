@@ -54,6 +54,13 @@ object RestAPIAccess {
         return wrapResponse(response)
     }
 
+    suspend fun attemptVerify(jwt: String): Boolean {
+        val response: HttpResponse = httpClient.get("$API_HOST/token/verify") {
+            bearerAuth(jwt)
+        }
+        return response.status == HttpStatusCode.OK
+    }
+
     suspend fun attemptCreateAlert(jwt: String, title: String, emoji: String?, message: String, placeId: String) {
         @Serializable
         data class CreateAlertDto(val title: String, val emoji: String?, val message: String, val placeId: String)
