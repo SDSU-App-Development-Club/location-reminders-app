@@ -1,12 +1,21 @@
 import android.content.SharedPreferences
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.google.android.libraries.places.api.net.PlacesClient
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.channels.produce
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 const val SIGNUP_SCREEN_ROUTE = "signup_screen"
@@ -47,7 +56,13 @@ fun App(prefs: SharedPreferences, placesClient: PlacesClient) {
 
     // todo add check to see if token is expired (should probably use a new endpoint)
     if (storedJwt != null) {
-        navController.navigate("$DASHBOARD_SCREEN_ROUTE/$storedJwt")
+        runBlocking {
+            if (RestAPIAccess.attemptVerify(storedJwt)) {
+                navController.navigate("$DASHBOARD_SCREEN_ROUTE/$storedJwt")
+            } else {
+                RestAPIAccess.invalidJwtCallback()
+            }
+        }
     }
 }
 
