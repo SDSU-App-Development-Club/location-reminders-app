@@ -15,6 +15,8 @@ public final class Result<V, E> {
     private final E error;
 
     private Result(boolean ok, @Nullable V value, @Nullable E error) {
+        Objects.requireNonNull(ok ? value : error);
+
         this.ok = ok;
         this.value = value;
         this.error = error;
