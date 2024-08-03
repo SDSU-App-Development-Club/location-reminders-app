@@ -13,13 +13,16 @@ source ".env" &> /dev/null || sed -i 's/\r//g' .env && source ".env"
 #
 # REQUIRED ENVIRONMENT VARIABLES
 #
-(test ! -z "$PG_USER" && echo " - PG_USER set to '$PG_USER'" && \
-test ! -z "$PG_DB_NAME" && echo " - PG_DB_NAME set to '$PG_DB_NAME'" && \
-test ! -z "$PG_PORT" && echo " - PG_PORT set to '$PG_PORT'" && \
-test ! -z "$PG_PASSWORD" && echo " - PG_PASSWORD set to '$PG_PASSWORD'" && \
-test ! -z "$JWT_SECRET_KEY" && echo " - JWT_SECRET_KEY set to '$JWT_SECRET_KEY'") \
-|| (echo "Missing required environment variables. See db_setup.sh" && exit)
-
+if [ -z "$PG_USER" ] || [ -z "$PG_DB_NAME" ] || [ -z "$PG_PORT" ] || [ -z "$PG_PASSWORD" ] || [ -z "$JWT_SECRET_KEY" ] || [ -z "$MAPS_API_KEY" ]; then
+    echo "Missing one or more required environment variables. See db_setup.sh"
+    exit 1
+fi
+echo " - PG_USER set to '$PG_USER'"
+echo " - PG_DB_NAME set to '$PG_DB_NAME'"
+echo " - PG_PORT set to '$PG_PORT'"
+echo " - PG_PASSWORD set to '$PG_PASSWORD'"
+echo " - JWT_SECRET_KEY set to '$JWT_SECRET_KEY'"
+echo " - MAPS_API_KEY set to '$MAPS_API_KEY'"
 
 
 # Check for docker
@@ -70,7 +73,12 @@ CREATE TABLE IF NOT EXISTS users
 );
 EOSQL
 
-echo "Tables created. Shutting down docker..."
+echo "Tables created. Running migrations..."
+
+./migration-7-20-2024.sh
+./migration-7-28-2024.sh
+
+echo "All migrations complete. Shutting down docker..."
 
 docker compose down
 
