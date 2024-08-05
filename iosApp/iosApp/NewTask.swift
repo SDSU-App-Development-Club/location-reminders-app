@@ -170,12 +170,19 @@ struct NewTaskTitle: View {
                     
                     
                     // TODO: turn this into a button that saves the new task
-                    Image(systemName: "plus")
-                        .foregroundColor(.white)
-                        .padding(8)
-                        .background(Color(hex: "FF009a88"))
-                        .fontWeight(.bold)
-                        .clipShape(Circle())
+                    Button(action: {
+                        
+                        //add function to add reminder
+                        
+                        
+                    }){
+                        Image(systemName: "plus")
+                            .foregroundColor(.white)
+                            .padding(8)
+                            .background(Color(hex: "FF009a88"))
+                            .fontWeight(.bold)
+                            .clipShape(Circle())
+                    }
                 }
                 .offset(y: UIScreen.main.bounds.height / 30)
                 .padding(20)
@@ -191,6 +198,7 @@ struct NewTaskTitle: View {
                     .foregroundColor(Color(hex: "EEEEEE"))
                     .ignoresSafeArea(.all)
             }
+            
             
         }
         
