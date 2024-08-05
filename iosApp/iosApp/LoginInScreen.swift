@@ -16,6 +16,9 @@ struct LogInScreen: View {
     @State private var signUpButton = false
     @State private var showingAlert = false
     @State var errorMessage: String = ""
+    let importantInfo = UserDefaults.standard
+
+    
     
     var body: some View {
         Group {
@@ -48,6 +51,7 @@ struct LogInScreen: View {
                                     RestAPIAccess().attemptLogin(username: email, password: password) { response, error in
                                         if let response = response {
                                             if response.ok {
+                                                importantInfo.set(response.value()!.jwt, forKey: "jwt")
                                                 logInButton = true
                                             } else {
                                                 switch response.error()?.value {
@@ -66,12 +70,6 @@ struct LogInScreen: View {
                                                 showingAlert = true
                                             }
                                         }
-//                                        if let response = response {
-//                                            logInButton = true
-//                                        } else {
-//                                            //alert button
-//                                            showingAlert = true
-//                                        }
                                     }
                                     
                                 }){
