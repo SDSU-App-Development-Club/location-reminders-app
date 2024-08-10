@@ -16,7 +16,7 @@ struct NewTask: View {
     @State private var location: String = ""
     @Binding var isVisible: Bool
     @State private var selectedLocation: CLLocationCoordinate2D?
-        @State private var mapCenter: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: -33.86, longitude: 151.20)
+    @State private var mapCenter: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: -33.86, longitude: 151.20)
     @State private var savedLocation: CLLocationCoordinate2D?
     
     
