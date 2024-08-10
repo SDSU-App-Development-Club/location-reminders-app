@@ -15,7 +15,7 @@ struct ReminderScreen: View {
     //    @State private var isClicked = false
     @State private var isNewTaskVisible = false
     @State private var slideOffset: CGFloat = UIScreen.main.bounds.height
-    @State private var isThereAList = true
+    @State private var isThereAList = false
     @State private var reminderList: [String] = []
     @State private var list: [String] = [] // Add this line
     
@@ -49,27 +49,34 @@ struct ReminderScreen: View {
                     } else {
                         //add parsing to get list
                         //for each thing in the list create a rounded rectangle with the correct attributes then add a spacer above it
-                        VStack {
-                            ZStack {
-                                HStack {
-                                    Image(systemName: "circle")
-                                        .fontWeight(.semibold)
-                                        .font(.title)
-                                    
-                                    VStack {
-                                        ForEach(Array(list.enumerated()), id: \.offset) { index, element in
-                                            Text(LocalizedStringKey(element))
+                        ScrollView {
+                                VStack(spacing: 15) {
+                                    ForEach(list, id: \.self) { item in
+                                        HStack(spacing: 15) {
+                                            Image(systemName: "circle")
+                                                .foregroundColor(.black)
+                                                .font(.system(size: 24))
+                                            
+                                            Text(item)
+                                                .font(.system(size: 18))
+                                                .foregroundColor(.black)
+                                                .multilineTextAlignment(.leading)
+                                            
+                                            Spacer()
                                         }
+                                        .padding(.vertical, 12)
+                                        .padding(.horizontal, 20)
+                                        .background(
+                                            RoundedRectangle(cornerRadius: 25)
+                                                .fill(Color(hex: "BFFDF2"))
+                                        )
+                                        .shadow(color: Color.black.opacity(0.2), radius: 5, x: 0, y: 2)
                                     }
                                 }
+                                .padding(.horizontal)
                             }
-                            .background(
-                                RoundedRectangle(cornerRadius: 25.0)
-                                    .foregroundStyle(Color(hex: "BFFDF2"))
-                                    .frame(width: UIScreen.main.bounds.width / 1.1, height:  UIScreen.main.bounds.height / 8 )
-                                    .shadow(color: Color.black.opacity(0.3), radius: 3, x: 5, y: 6)
-                            )
-                        }
+                            .frame(maxHeight: UIScreen.main.bounds.height / 2) // Limit the maximum height
+
                         
                     }
                 }
@@ -141,6 +148,9 @@ struct ReminderScreen: View {
                 DispatchQueue.main.async {
                     self.list = value as? [String] ?? []
                     self.isThereAList = !self.list.isEmpty
+                    
+                    //take out if needed
+                    isThereAList = true
                 }
             }
         }
@@ -209,3 +219,26 @@ struct RemindersTitle: View {
 //                            )
 //                        }
 //                        //.background() //add later to help with spacing
+
+
+//                        VStack {
+//                            ZStack {
+//                                HStack {
+//                                    Image(systemName: "circle")
+//                                        .fontWeight(.semibold)
+//                                        .font(.title)
+//
+//                                    VStack {
+//                                        ForEach(Array(list.enumerated()), id: \.offset) { index, element in
+//                                            Text(LocalizedStringKey(element))
+//                                        }
+//                                    }
+//                                }
+//                            }
+//                            .background(
+//                                RoundedRectangle(cornerRadius: 25.0)
+//                                    .foregroundStyle(Color(hex: "BFFDF2"))
+//                                    .frame(width: UIScreen.main.bounds.width / 1.1, height:  UIScreen.main.bounds.height / 8 )
+//                                    .shadow(color: Color.black.opacity(0.3), radius: 3, x: 5, y: 6)
+//                            )
+//                        }
