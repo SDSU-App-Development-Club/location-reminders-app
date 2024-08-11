@@ -9,25 +9,22 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableIntState
 import androidx.compose.runtime.MutableState
@@ -41,7 +38,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -58,132 +54,105 @@ import swifties.testapp.R
 fun CreateAlertScreen(
     prefs: SharedPreferences,
     placesClient: PlacesClient,
-    navController: NavController
+    navController: NavController,
+    titleState: MutableState<String>,
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(48.dp)
-            .background(Color.White)
-    ) {
-        Column(
-            verticalArrangement = Arrangement.Center,
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .fillMaxHeight()
-        ) {
-            Text(
-                text = "New Task #?",
-                style = TextStyle(
-                    fontWeight = FontWeight.SemiBold,
-                    fontSize = 24.sp
-                )
-            )
-        }
-        HorizontalDivider(thickness = 2.dp)
-    }
-
-    val interactionSource = remember { MutableInteractionSource() }
-    val taskName = remember { mutableStateOf("") }
-    val notes = remember { mutableStateOf("") }
     var isEmojiPickerVisible by remember { mutableStateOf(false) }
     var selectedEmoji by remember { mutableStateOf(EmojiViewItem("", emptyList())) }
     val selectedLocationState = remember { mutableIntStateOf(0) }
-    var selectedLocation by selectedLocationState
-    val placeIdState = remember { mutableStateOf("") }
-    var placeId by placeIdState
     val showMapPopupState = remember { mutableStateOf(false) }
-    var showMapPopup by showMapPopupState
 
+    // main element container with padding on the sides
     Column(
         modifier = Modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .padding(horizontal = 15.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
+        // used by .clickable to close emoji picker without picking an emoji
+        val interactionSource = remember { MutableInteractionSource() }
+
         Column(
             modifier = Modifier
                 .clickable(
                     interactionSource = interactionSource,
                     indication = null
-                ) { isEmojiPickerVisible = false }
-
+                ) { isEmojiPickerVisible = false },
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
+            // Task name + emoji
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.End,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 32.dp)
-                    .padding(horizontal = 15.dp, vertical = 15.dp)
             ) {
+                Button(
+                    modifier = Modifier
+                        .padding(end = 10.dp)
+                        .height(54.dp)
+                        .width(54.dp)
+                        .clip(CircleShape),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.White),
+                    contentPadding = PaddingValues(0.dp),
+                    onClick = { isEmojiPickerVisible = !isEmojiPickerVisible }
+                ) {
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier.width(54.dp)
+                    ) {
+                        Text(
+                            text = selectedEmoji.emoji,
+                            style = TextStyle(
+                                fontSize = 32.sp
+                            )
+                        )
+
+                        if (selectedEmoji.emoji.isEmpty()) {
+                            Icon(
+                                painter = painterResource(R.drawable.baseline_add_reaction_24),
+                                tint = Color(0xCB, 0xCB, 0xCB),
+                                contentDescription = "ah",
+                                modifier = Modifier.fillMaxSize(fraction = 0.6f)
+                            )
+                        }
+                    }
+                }
+
+                val taskNameState = remember { mutableStateOf(if (titleState.value == "New Task") "" else titleState.value) }
+                // Task name
                 TextField(
-                    value = taskName.value,
-                    onValueChange = { taskName.value = it },
+                    value = taskNameState.value,
+                    onValueChange = {
+                        if (it.isEmpty()) {
+                            titleState.value = "New Task"
+                        } else {
+                            titleState.value = it
+                        }
+                        taskNameState.value = it
+                    },
+                    colors = TextFieldDefaults.colors(
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent
+                    ),
+                    singleLine = true,
                     placeholder = { Text("New Task") },
                     textStyle = TextStyle(fontSize = 20.sp),
                     modifier = Modifier
                         .weight(1f)
-                        .background(Color.White, RoundedCornerShape(8.dp))
-                        .padding(8.dp),
-                    colors = TextFieldDefaults.colors(
-                        focusedContainerColor = Color.White,
-                        unfocusedContainerColor = Color.White,
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent
-                    )
-                )
-                Button(
-                    modifier = Modifier.padding(5.dp, 0.dp, 0.dp, 0.dp),
-                    shape = CircleShape,
-                    colors = ButtonDefaults.buttonColors(containerColor = Color.White),
-                    onClick = { isEmojiPickerVisible = !isEmojiPickerVisible }) {
-                    if (selectedEmoji.emoji != "") {
-                        // Handle the case where an emoji is selected, if necessary
-                        Text(selectedEmoji.emoji)
-                    } else {
-                        Image(
-                            painter = painterResource(R.drawable.baseline_add_reaction_24),
-                            contentDescription = "",
-                            contentScale = ContentScale.Fit, // Try different ContentScale options
-                        )
-                    }
-                }
-            }
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.End,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 15.dp)
-            ) {
-                TextField(
-                    value = notes.value,
-                    onValueChange = { notes.value = it },
-                    textStyle = TextStyle(fontSize = 16.sp),
-                    placeholder = { Text("Notes") },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(75.dp)
-                        .background(Color.White, RoundedCornerShape(8.dp))
-                        .padding(8.dp),
-                    colors = TextFieldDefaults.colors(
-                        unfocusedContainerColor = Color.White,
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent
-                    )
+                        .clip(RoundedCornerShape(30.dp)),
                 )
             }
 
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.End,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 15.dp)
-            ) {
-            }
+            // hide everything below the emoji button so that it can be replaced by emoji picker
+            if (!isEmojiPickerVisible) {
+                NotesTextBox()
 
-            LocationComponent(selectedLocationState, placeIdState, prefs, showMapPopupState)
+                val placeIdState = remember { mutableStateOf("") }
+
+                LocationComponent(selectedLocationState, placeIdState, placesClient, prefs, showMapPopupState)
+            }
         }
         if (isEmojiPickerVisible) {
             EmojiPicker(
@@ -192,10 +161,35 @@ fun CreateAlertScreen(
                     isEmojiPickerVisible = false // Close picker after selection
                 }
             )
-        } else {
-            LocationMapScreen(prefs, placesClient, placeIdState, navController)
         }
     }
+}
+
+@Composable
+private fun NotesTextBox() {
+    val notesState = remember { mutableStateOf("") }
+
+    // Notes
+    TextField(
+        value = notesState.value,
+        onValueChange = {
+            // limit to 280 chars
+            if (it.codePointCount(0, it.length) <= 280) {
+                notesState.value = it
+            }
+        },
+        textStyle = TextStyle(fontSize = 16.sp),
+        placeholder = { Text("Notes") },
+        maxLines = 5,
+        colors = TextFieldDefaults.colors(
+            unfocusedContainerColor = Color.White,
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent
+        ),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(30.dp)),
+    )
 }
 
 @Composable
@@ -218,6 +212,7 @@ fun EmojiPicker(onEmojiSelected: (EmojiViewItem) -> Unit) {
 fun LocationComponent(
     selectedLocationState: MutableIntState,
     placeIdState: MutableState<String>,
+    placesClient: PlacesClient,
     prefs: SharedPreferences,
     showMapPopupState: MutableState<Boolean>
 ) {
@@ -227,9 +222,8 @@ fun LocationComponent(
 
     Column(
         modifier = Modifier
-            .padding(16.dp)
-            .background(Color.White, shape = RoundedCornerShape(8.dp))
-            .padding(16.dp)
+            .background(Color.White, shape = RoundedCornerShape(30.dp))
+            .padding(vertical = 16.dp, horizontal = 14.dp)
     ) {
         // Row for the icons and text
         Row(
@@ -246,8 +240,8 @@ fun LocationComponent(
 
             for (i in 0 until 4) {
                 val label = labels[i]
-                val buttonColor = if (selectedLocation == i) Color(53, 150, 59) else Color.LightGray
-                val textColor = if (selectedLocation == i) Color(53, 150, 59) else Color.Black
+                val buttonColor = if (selectedLocation == i) Color(48, 185, 0) else Color.LightGray
+                val textColor = if (selectedLocation == i) Color(48, 185, 0) else Color.Black
 
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally
@@ -285,15 +279,17 @@ fun LocationComponent(
             }
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(12.dp))
         HorizontalDivider()
-
 
         // Arriving text
         Text(
-            text = placeIdState.value,
-            style = MaterialTheme.typography.bodySmall,
-            color = Color.Gray
+            text = "Arriving: " + placeIdState.value,
+            style = MaterialTheme.typography.bodyMedium,
+            color = Color.DarkGray,
+            modifier = Modifier.padding(start = 6.dp, top = 4.dp)
         )
     }
+
+    LocationMapScreen(prefs, placesClient, placeIdState)
 }

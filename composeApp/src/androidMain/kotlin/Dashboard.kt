@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -22,12 +23,10 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults.buttonColors
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -37,17 +36,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.rememberVectorPainter
-import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.Density
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.google.android.libraries.places.api.net.PlacesClient
 import swifties.testapp.R
+import swifties.testapp.TealColor
 
 @Composable
 fun DashboardScreen(
@@ -153,7 +154,59 @@ private fun NewAlertPopup(
                 .clip(RoundedCornerShape(topStart = 20.dp))
                 .background(Color(235, 235, 235))
         ) {
-            CreateAlertScreen(prefs, placesClient, navController)
+            val titleState = remember { mutableStateOf("New Task") }
+            Box {
+                // header
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(48.dp)
+                        .background(Color.White)
+                ) {
+                    Column(
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier
+                            .fillMaxWidth(fraction = 0.7f)
+                            .fillMaxHeight()
+                    ) {
+                        Text(
+                            text = titleState.value,
+                            color = MaterialTheme.colorScheme.primary,
+                            maxLines = 1,
+                            style = TextStyle(
+                                fontWeight = FontWeight.SemiBold,
+                                fontSize = 24.sp
+                            ),
+                            overflow = TextOverflow.Ellipsis,
+                        )
+                    }
+                    HorizontalDivider(thickness = 2.dp)
+                }
+
+                if (showPopup) {
+                    // Close menu button
+                    Button(
+                        onClick = {
+                            showPopup = !showPopup
+                        },
+                        colors = buttonColors(containerColor = Color.Transparent)
+                    ) {
+                        val icon = painterResource(R.drawable.downchevron)
+                        Icon(
+                            painter = icon,
+                            tint = MaterialTheme.colorScheme.primary,
+                            contentDescription = "Close Task Menu",
+                        )
+                    }
+                }
+            }
+
+            if (showPopup) {
+                CreateAlertScreen(prefs, placesClient, navController, titleState)
+            }
         }
         Row(
             modifier = Modifier
@@ -163,7 +216,11 @@ private fun NewAlertPopup(
         ) {
             Button(
                 onClick = {
-                    showPopup = !showPopup
+                    if (showPopup) {
+                        // todo create alert
+                    } else {
+                        showPopup = true
+                    }
                 },
                 modifier = Modifier
                     .size(64.dp)
@@ -176,8 +233,8 @@ private fun NewAlertPopup(
                 val icon = painterResource(R.drawable.plus_aqua)
                 Icon(
                     painter = icon,
-                    tint = Color(0xFF009a88),
-                    contentDescription = "Add Task",
+                    tint = MaterialTheme.colorScheme.primary,
+                    contentDescription = if (showPopup) "Create Task" else "Add Task",
                     modifier = Modifier.fillMaxSize(),
                 )
             }
