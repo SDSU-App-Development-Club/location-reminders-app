@@ -11,11 +11,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults.buttonColors
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults.textFieldColors
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults.buttonColors
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -52,11 +52,9 @@ fun LogInScreen(
 
                 if (loginResponse.ok) {
                     switchToDashboard(loginResponse.value().jwt)
-                }
-                else {
+                } else {
 
                 }
-
             }
         ) {
             SwitchCommand(
@@ -108,35 +106,26 @@ fun UsernamePasswordAndButton(
         // Extra fields in case Sign Up takes more fields
         beforeFields()
 
-        val teal = Color(0xFF009a88)
-        val textFieldColors = textFieldColors(
-            focusedIndicatorColor = teal,
-            focusedLabelColor = teal,
-            cursorColor = teal,
-        )
-
         // Email field
         TextField(
             modifier = Modifier
                 .padding(top = 20.dp)
-                .clip(RoundedCornerShape(20.dp))
+                .clip(RoundedCornerShape(15.dp))
                 .fillMaxWidth()
                 .background(color = Color.White),
             value = emailField,
             onValueChange = { emailField = it },
-            colors = textFieldColors,
             label = { Text(text = "Email Address") }
         )
         // Password field
         TextField(
             modifier = Modifier
                 .padding(top = 20.dp)
-                .clip(RoundedCornerShape(20.dp))
+                .clip(RoundedCornerShape(15.dp))
                 .fillMaxWidth()
                 .background(color = Color.White),
             value = passwordField,
             onValueChange = { passwordField = it },
-            colors = textFieldColors,
             label = { Text(text = "Enter Password") },
             visualTransformation = PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -149,14 +138,14 @@ fun UsernamePasswordAndButton(
                 buttonContext.launch { onButtonClick(emailField, passwordField) }
             },
             colors = buttonColors(
-                backgroundColor = Color.White,
-                contentColor = teal,
+                containerColor = MaterialTheme.colorScheme.onPrimary,
+                contentColor = MaterialTheme.colorScheme.primary,
             ),
+            shape = RoundedCornerShape(15.dp),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 20.dp)
                 .height(55.dp)
-                .clip(RoundedCornerShape(20.dp))
         ) {
             // Overlay the gradient text on top of the button
             Text(

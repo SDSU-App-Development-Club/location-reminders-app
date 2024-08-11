@@ -52,7 +52,6 @@ fun LocationMapScreen(
     prefs: SharedPreferences,
     placesClient: PlacesClient,
     placeIdState: MutableState<String>,
-    navController: NavController,
 ) {
     var query by remember { mutableStateOf("") }
     var predictions by remember { mutableStateOf(listOf<AutocompletePrediction>()) }
@@ -65,7 +64,6 @@ fun LocationMapScreen(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp)
     ) {
         TextField(
             value = query,
@@ -121,8 +119,7 @@ fun LocationMapScreen(
                                     }
                                     predictions = emptyList() // Clear predictions after selection
                                 }
-                            }
-                            .padding(8.dp),
+                            },
                         style = TextStyle(fontSize = 16.sp)
                     )
                 }
@@ -158,12 +155,6 @@ fun LocationMapScreen(
                     )
                 }
             }
-        }
-        Button(
-            onClick = { navController.navigate("dashboard_screen") },
-            modifier = Modifier.padding(16.dp)
-        ) {
-            Text("Back to Create Alert")
         }
     }
 }
