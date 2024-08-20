@@ -169,11 +169,21 @@ struct NewTaskTitle: View {
                     Spacer()
                     
                     
+                    
+                    
                     // TODO: turn this into a button that saves the new task
                     Button(action: {
                         
                         //add function to add reminder
-                        
+//                        RestAPIAccess().attemptCreateAlert(jwt: , title: newTask, emoji: , message: notes, placeID: selectedLocation) {
+//                            response, error in
+//                            if let response = response {
+//                                
+//                            } else {
+//                                
+//                            }
+//                            
+//                        }
                         
                     }){
                         Image(systemName: "plus")
@@ -209,22 +219,34 @@ struct NewTaskTitle: View {
 
 struct EmojiAndTitle: View {
     @Binding var newTask: String
+    @State private var emoji: String = ""
     
     var body: some View {
         HStack {
             //adds an emoji to the task
-            Button(action: {
-                //back end stuff to remember the emoji & add a new emoji
-            }) {
-                ZStack {
-                    Circle()
-                        .foregroundColor(.white)
-                        .frame(width: 48)
-                    
-                    Image("add emoji")
-                        .offset(x: 2)
-                }
-            }
+            
+            
+//            Button(action: {
+//                //TODO: back end stuff to remember the emoji & add a new emoji
+//               
+//                
+//            }) {
+//                ZStack {
+//                    Circle()
+//                        .foregroundColor(.white)
+//                        .frame(width: 48)
+//                    
+//                    Image("add emoji")
+//                        .offset(x: 2)
+//                }
+//            }
+            
+            EmojiTextField(text: $emoji, placeholder: "🙂")
+                .frame(width: 48, height: 48)
+                                .background(Circle().fill(Color.white))
+                                .overlay(Circle().stroke(Color.gray, lineWidth: 1))
+            
+
             //typing the title of the task
             ZStack {
                 RoundedRectangle(cornerRadius: 22)
@@ -235,6 +257,24 @@ struct EmojiAndTitle: View {
                     .padding(.leading, 16)
             }
         }.padding(.horizontal)
+        
+//        HStack {
+//                    // Emoji input
+//                    EmojiTextField(text: $emoji, placeholder: "🙂")
+//                        .frame(width: 48, height: 48)
+//                        .background(Circle().fill(Color.white))
+//                        .overlay(Circle().stroke(Color.gray, lineWidth: 1))
+//                    
+//                    // Task title input
+//                    ZStack {
+//                        RoundedRectangle(cornerRadius: 22)
+//                            .frame(height: 48)
+//                            .foregroundColor(.white)
+//                        
+//                        TextField("New Task __", text: $newTask)
+//                            .padding(.leading, 16)
+//                    }
+//                }.padding(.horizontal)
     }
 }
 
