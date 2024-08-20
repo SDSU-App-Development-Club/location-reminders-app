@@ -7,12 +7,18 @@
 //
 
 import SwiftUI
+import GoogleMaps
 
 struct NewTask: View {
     @State private var newTask: String = ""
     @State private var notes: String = ""
     @State private var toggle = false
+    @State private var location: String = ""
     @Binding var isVisible: Bool
+    @State private var selectedLocation: CLLocationCoordinate2D?
+    @State private var mapCenter: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: -33.86, longitude: 151.20)
+    @State private var savedLocation: CLLocationCoordinate2D?
+    
     
     var body: some View {
         
@@ -23,10 +29,10 @@ struct NewTask: View {
                 .shadow(color: Color.black.opacity(0.5), radius: 10)
                 .offset(y: UIScreen.main.bounds.height / 25)
             
-            NewTaskTitle(toggle: $toggle, isVisible: $isVisible)
+            NewTaskTitle(toggle: $toggle, isVisible: $isVisible, newTask: $newTask)
             
             //new task information
-            VStack {
+            VStack (spacing: 10) {
                 //emoji + new task __
                 EmojiAndTitle(newTask: $newTask)
                 
@@ -40,8 +46,9 @@ struct NewTask: View {
                         .frame(height: 200)
                         .foregroundStyle(.white)
                     
-                    VStack {
+                    VStack(spacing: 10) {
                         //location title and icon
+
                         LocationTitle()
                         
                         //quick find address icons
@@ -55,32 +62,77 @@ struct NewTask: View {
                             WorkAddress()
                             //custom address
                             CustomAddress()
+                            
                         }
                         
+                        Divider()
                         
-                        //divider rectangle
-                        Rectangle()
-                            .frame(height: 1)
-                            .padding(.horizontal)
-                            .foregroundStyle(Color(hex: "#cbcbc9"))
+                        HStack {
+                            TextField("Search for a Place", text: $location, onCommit: {
+                                searchLocation()
+                            })
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            
+                            Button(action: searchLocation) {
+                                Image(systemName: "magnifyingglass")
+                            }
+                        }
+                        .padding(.horizontal)
                         
-                        //Button/thingy for changing/setting the location data
-                        //actually implement when backend is up
-                        Text("Arriving")
+                        GoogleMapView(center: $mapCenter, selectedLocation: $selectedLocation)
+                            .frame(height: 150)
+                            .cornerRadius(10)
+                        
+                        Button(action: saveLocation) {
+                            Text("Save Location")
+                                .padding()
+                                .background(Color.blue)
+                                .foregroundColor(.white)
+                                .cornerRadius(10)
+                        }
+                        .disabled(selectedLocation == nil)
+                        
                         
                     }
+                    .padding(.top, 10)
+                    .padding(.bottom, 10)
                     
-                }.padding(.horizontal)
-                
-                Spacer()
-                    .frame(height: UIScreen.main.bounds.height / 3.8)
+                }
+                .padding(.horizontal)
+                .background(
+                    RoundedRectangle(cornerRadius: 20)
+                        .fill(Color.white)
+                        .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
+                )
+                .padding(.horizontal)
                 
             }
+            .padding(.top, 20)
             
             
             if toggle {
                 ReminderScreen()
             }
+            
+            
+        }
+    }
+    
+    func searchLocation() {
+        let geocoder = CLGeocoder()
+        geocoder.geocodeAddressString(location) { placemarks, error in
+            if let placemark = placemarks?.first, let location = placemark.location {
+                self.mapCenter = location.coordinate
+                self.selectedLocation = location.coordinate
+            }
+        }
+    }
+    
+    func saveLocation() {
+        if let location = selectedLocation {
+            savedLocation = location
+            // Here you can also save the location to your app's data storage
+            print("Location saved: \(location.latitude), \(location.longitude)")
         }
     }
 }
@@ -94,6 +146,7 @@ struct NewTask: View {
 struct NewTaskTitle: View {
     @Binding var toggle: Bool
     @Binding var isVisible: Bool
+    @Binding var newTask: String
     
     var body: some View {
         ZStack {
@@ -110,19 +163,36 @@ struct NewTaskTitle: View {
                         }
                     Spacer()
                     
-                    Text("New Task __")
+                    TextField("New Task __", text: $newTask)
                         .font(.headline)
                     
                     Spacer()
                     
                     
+                    
+                    
                     // TODO: turn this into a button that saves the new task
-                    Image(systemName: "plus")
-                        .foregroundColor(.white)
-                        .padding(8)
-                        .background(Color(hex: "FF009a88"))
-                        .fontWeight(.bold)
-                        .clipShape(Circle())
+                    Button(action: {
+                        
+                        //add function to add reminder
+//                        RestAPIAccess().attemptCreateAlert(jwt: , title: newTask, emoji: , message: notes, placeID: selectedLocation) {
+//                            response, error in
+//                            if let response = response {
+//                                
+//                            } else {
+//                                
+//                            }
+//                            
+//                        }
+                        
+                    }){
+                        Image(systemName: "plus")
+                            .foregroundColor(.white)
+                            .padding(8)
+                            .background(Color(hex: "FF009a88"))
+                            .fontWeight(.bold)
+                            .clipShape(Circle())
+                    }
                 }
                 .offset(y: UIScreen.main.bounds.height / 30)
                 .padding(20)
@@ -139,13 +209,8 @@ struct NewTaskTitle: View {
                     .ignoresSafeArea(.all)
             }
             
-
             
         }
-        
-        
-        
-        
         
     }
     
@@ -154,22 +219,34 @@ struct NewTaskTitle: View {
 
 struct EmojiAndTitle: View {
     @Binding var newTask: String
+    @State private var emoji: String = ""
     
     var body: some View {
         HStack {
             //adds an emoji to the task
-            Button(action: {
-                //back end stuff to remember the emoji & add a new emoji
-            }) {
-                ZStack {
-                    Circle()
-                        .foregroundColor(.white)
-                        .frame(width: 48)
-                    
-                    Image("add emoji")
-                        .offset(x: 2)
-                }
-            }
+            
+            
+//            Button(action: {
+//                //TODO: back end stuff to remember the emoji & add a new emoji
+//               
+//                
+//            }) {
+//                ZStack {
+//                    Circle()
+//                        .foregroundColor(.white)
+//                        .frame(width: 48)
+//                    
+//                    Image("add emoji")
+//                        .offset(x: 2)
+//                }
+//            }
+            
+            EmojiTextField(text: $emoji, placeholder: "🙂")
+                .frame(width: 48, height: 48)
+                                .background(Circle().fill(Color.white))
+                                .overlay(Circle().stroke(Color.gray, lineWidth: 1))
+            
+
             //typing the title of the task
             ZStack {
                 RoundedRectangle(cornerRadius: 22)
@@ -180,6 +257,24 @@ struct EmojiAndTitle: View {
                     .padding(.leading, 16)
             }
         }.padding(.horizontal)
+        
+//        HStack {
+//                    // Emoji input
+//                    EmojiTextField(text: $emoji, placeholder: "🙂")
+//                        .frame(width: 48, height: 48)
+//                        .background(Circle().fill(Color.white))
+//                        .overlay(Circle().stroke(Color.gray, lineWidth: 1))
+//                    
+//                    // Task title input
+//                    ZStack {
+//                        RoundedRectangle(cornerRadius: 22)
+//                            .frame(height: 48)
+//                            .foregroundColor(.white)
+//                        
+//                        TextField("New Task __", text: $newTask)
+//                            .padding(.leading, 16)
+//                    }
+//                }.padding(.horizontal)
     }
 }
 
@@ -211,7 +306,7 @@ struct LocationTitle: View {
                 .fontWeight(.semibold)
             
             Spacer()
-                .frame(width: UIScreen.main.bounds.height / 3.7)
+                .frame(width: UIScreen.main.bounds.width / 1.8)
         }
     }
 }

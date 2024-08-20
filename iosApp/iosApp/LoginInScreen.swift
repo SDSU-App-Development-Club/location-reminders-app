@@ -15,6 +15,10 @@ struct LogInScreen: View {
     @State private var logInButton = false
     @State private var signUpButton = false
     @State private var showingAlert = false
+    @State var errorMessage: String = ""
+    let importantInfo = UserDefaults.standard
+
+    
     
     var body: some View {
         Group {
@@ -46,10 +50,25 @@ struct LogInScreen: View {
                                 Button(action: {
                                     RestAPIAccess().attemptLogin(username: email, password: password) { response, error in
                                         if let response = response {
-                                            logInButton = true
-                                        } else {
-                                            //alert button
-                                            showingAlert = true
+                                            if response.ok {
+                                                importantInfo.set(response.value()!.jwt, forKey: "jwt")
+                                                logInButton = true
+                                            } else {
+                                                switch response.error()?.value {
+                                                case 401:
+                                                    errorMessage = "Unauthorized"
+                                                case 403:
+                                                    errorMessage = "Forbidden"
+                                                case 404:
+                                                    errorMessage = "Not found"
+                                                case 400:
+                                                    errorMessage = "Bad Request"
+                                                default:
+                                                    errorMessage = "no message " + String(response.error()!.value)
+                                                }
+                                                
+                                                showingAlert = true
+                                            }
                                         }
                                     }
                                     
@@ -70,7 +89,8 @@ struct LogInScreen: View {
                                 .alert("Log in Failed", isPresented: $showingAlert) {
                                     Button("OK", role: .cancel) { }
                                 } message: {
-                                    Text(email.isEmpty || password.isEmpty ? "Please enter both email and password." : "Login failed. Please try again.")
+//                                    Text(email.isEmpty || password.isEmpty ? "Please enter both email and password." : "Login failed. Please try again.")
+                                    Text(errorMessage)
                                 }
                                 
                                 

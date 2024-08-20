@@ -33,7 +33,13 @@ fun SignUpScreen(
             buttonLabel = "Sign Up",
             onButtonClick = { email, password ->
                 val loginResponse = RestAPIAccess.attemptSignup(email, password)
-                switchToDashboard(loginResponse.jwt)
+
+                if (loginResponse.ok) {
+                    switchToDashboard(loginResponse.value().jwt)
+                }
+                else {
+
+                }
             }
         ) {
             SwitchCommand(
