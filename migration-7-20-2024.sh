@@ -22,6 +22,7 @@ done
 echo "Postgres loaded! Applying migration..."
 
 PGPASSWORD="$PG_PASSWORD" psql -h "localhost" -v ON_ERROR_STOP=1 --username "$PG_USER" -p "$PG_PORT" --dbname "$PG_DB_NAME" <<-EOSQL
+BEGIN;
 ALTER TABLE alerts RENAME COLUMN location_name TO title;
 ALTER TABLE alerts RENAME COLUMN alert_id TO alertId;
 ALTER TABLE alerts ADD COLUMN emoji TEXT;
@@ -34,6 +35,7 @@ ALTER TABLE alerts DROP COLUMN created_at;
 ALTER TABLE users RENAME COLUMN user_id TO userId;
 ALTER TABLE users RENAME COLUMN password_hash TO passwordHash;
 ALTER TABLE users RENAME COLUMN created_at TO createdAt;
+COMMIT;
 EOSQL
 
 echo "Postgres loaded! Applying migration..."
