@@ -1,7 +1,10 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsCompose)
+
 }
 
 kotlin {
@@ -40,18 +43,24 @@ android {
     sourceSets["main"].res.srcDirs("src/androidMain/res")
     sourceSets["main"].resources.srcDirs("src/commonMain/resources")
 
+    // read from .env
+    val dotEnv = Properties()
+    dotEnv.load(rootProject.file(".env").inputStream())
+
     defaultConfig {
         applicationId = "swifties.testapp"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
+        manifestPlaceholders.put("MAPS_API_KEY", dotEnv.getProperty("MAPS_API_KEY"))
     }
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
@@ -77,9 +86,16 @@ dependencies {
     implementation(libs.jjwt.api)
     implementation(libs.jjwt.impl)
     implementation(libs.jjwt.jackson)
-    implementation(libs.volley)
-    implementation("androidx.emoji2:emoji2-emojipicker:1.4.0-beta05")
+    implementation(libs.androidx.emoji2.emojipicker)
     implementation(libs.androidx.material3.android)
+    implementation(libs.places)
+    implementation(libs.play.services.maps)
+    implementation(libs.maps.compose)
+    implementation(libs.play.services.location)
+
+
+
+
 
 }
 

@@ -11,12 +11,17 @@
 		058557D9273AAEEB004C7B11 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 058557D8273AAEEB004C7B11 /* Preview Assets.xcassets */; };
 		2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2152FB032600AC8F00CF470E /* iOSApp.swift */; };
 		560C6C572C37962200814D6C /* ListScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 560C6C562C37962200814D6C /* ListScreen.swift */; };
+		5616072D2C5C655C00130E79 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5616072C2C5C655C00130E79 /* AppDelegate.swift */; };
+		561607352C5C713A00130E79 /* GoogleMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 561607342C5C713A00130E79 /* GoogleMapView.swift */; };
 		5619B6652C3E477600B7ACCE /* CompletedScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5619B6642C3E477600B7ACCE /* CompletedScreen.swift */; };
 		56396A362C38F97F000C25B0 /* ReminderScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56396A352C38F97F000C25B0 /* ReminderScreen.swift */; };
 		566330462C16C4B6005548FA /* SignUpScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 566330452C16C4B6005548FA /* SignUpScreen.swift */; };
 		566330482C16C76A005548FA /* LoginInScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 566330472C16C76A005548FA /* LoginInScreen.swift */; };
+		5675BC8D2C681E5A004004FA /* MCEmojiPicker in Frameworks */ = {isa = PBXBuildFile; productRef = 5675BC8C2C681E5A004004FA /* MCEmojiPicker */; };
+		5675BC932C682E0F004004FA /* EmojiTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5675BC922C682E0F004004FA /* EmojiTextField.swift */; };
 		56A9FC7D2C475E1F00EB9CD0 /* NewTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56A9FC7C2C475E1F00EB9CD0 /* NewTask.swift */; };
 		56BC28662C0EF662002623FA /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56BC28652C0EF662002623FA /* ColorExtension.swift */; };
+		56C26CEA2C58859000E6B5E3 /* GoogleMaps in Frameworks */ = {isa = PBXBuildFile; productRef = 56C26CE92C58859000E6B5E3 /* GoogleMaps */; };
 		7555FF83242A565900829871 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7555FF82242A565900829871 /* ContentView.swift */; };
 /* End PBXBuildFile section */
 
@@ -25,10 +30,13 @@
 		058557D8273AAEEB004C7B11 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		2152FB032600AC8F00CF470E /* iOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSApp.swift; sourceTree = "<group>"; };
 		560C6C562C37962200814D6C /* ListScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListScreen.swift; sourceTree = "<group>"; };
+		5616072C2C5C655C00130E79 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		561607342C5C713A00130E79 /* GoogleMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleMapView.swift; sourceTree = "<group>"; };
 		5619B6642C3E477600B7ACCE /* CompletedScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletedScreen.swift; sourceTree = "<group>"; };
 		56396A352C38F97F000C25B0 /* ReminderScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderScreen.swift; sourceTree = "<group>"; };
 		566330452C16C4B6005548FA /* SignUpScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpScreen.swift; sourceTree = "<group>"; };
 		566330472C16C76A005548FA /* LoginInScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginInScreen.swift; sourceTree = "<group>"; };
+		5675BC922C682E0F004004FA /* EmojiTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiTextField.swift; sourceTree = "<group>"; };
 		56A9FC7C2C475E1F00EB9CD0 /* NewTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTask.swift; sourceTree = "<group>"; };
 		56BC28652C0EF662002623FA /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
 		7555FF7B242A565900829871 /* TestApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -42,6 +50,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				56C26CEA2C58859000E6B5E3 /* GoogleMaps in Frameworks */,
+				5675BC8D2C681E5A004004FA /* MCEmojiPicker in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -86,8 +96,11 @@
 			children = (
 				058557BA273AAA24004C7B11 /* Assets.xcassets */,
 				7555FF82242A565900829871 /* ContentView.swift */,
+				5616072C2C5C655C00130E79 /* AppDelegate.swift */,
 				560C6C562C37962200814D6C /* ListScreen.swift */,
+				561607342C5C713A00130E79 /* GoogleMapView.swift */,
 				56A9FC7C2C475E1F00EB9CD0 /* NewTask.swift */,
+				5675BC922C682E0F004004FA /* EmojiTextField.swift */,
 				5619B6642C3E477600B7ACCE /* CompletedScreen.swift */,
 				56396A352C38F97F000C25B0 /* ReminderScreen.swift */,
 				566330472C16C76A005548FA /* LoginInScreen.swift */,
@@ -126,6 +139,8 @@
 			);
 			name = iosApp;
 			packageProductDependencies = (
+				56C26CE92C58859000E6B5E3 /* GoogleMaps */,
+				5675BC8C2C681E5A004004FA /* MCEmojiPicker */,
 			);
 			productName = iosApp;
 			productReference = 7555FF7B242A565900829871 /* TestApp.app */;
@@ -156,6 +171,8 @@
 			);
 			mainGroup = 7555FF72242A565900829871;
 			packageReferences = (
+				56C26CE82C58859000E6B5E3 /* XCRemoteSwiftPackageReference "ios-maps-sdk" */,
+				5675BC8B2C681E5A004004FA /* XCRemoteSwiftPackageReference "MCEmojiPicker" */,
 			);
 			productRefGroup = 7555FF7C242A565900829871 /* Products */;
 			projectDirPath = "";
@@ -208,10 +225,13 @@
 				560C6C572C37962200814D6C /* ListScreen.swift in Sources */,
 				2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */,
 				56A9FC7D2C475E1F00EB9CD0 /* NewTask.swift in Sources */,
+				5675BC932C682E0F004004FA /* EmojiTextField.swift in Sources */,
+				561607352C5C713A00130E79 /* GoogleMapView.swift in Sources */,
 				56396A362C38F97F000C25B0 /* ReminderScreen.swift in Sources */,
 				7555FF83242A565900829871 /* ContentView.swift in Sources */,
 				5619B6652C3E477600B7ACCE /* CompletedScreen.swift in Sources */,
 				56BC28662C0EF662002623FA /* ColorExtension.swift in Sources */,
+				5616072D2C5C655C00130E79 /* AppDelegate.swift in Sources */,
 				566330462C16C4B6005548FA /* SignUpScreen.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -417,6 +437,38 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		5675BC8B2C681E5A004004FA /* XCRemoteSwiftPackageReference "MCEmojiPicker" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/izyumkin/MCEmojiPicker";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.2.3;
+			};
+		};
+		56C26CE82C58859000E6B5E3 /* XCRemoteSwiftPackageReference "ios-maps-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/googlemaps/ios-maps-sdk";
+			requirement = {
+				kind = exactVersion;
+				version = 9.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		5675BC8C2C681E5A004004FA /* MCEmojiPicker */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5675BC8B2C681E5A004004FA /* XCRemoteSwiftPackageReference "MCEmojiPicker" */;
+			productName = MCEmojiPicker;
+		};
+		56C26CE92C58859000E6B5E3 /* GoogleMaps */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 56C26CE82C58859000E6B5E3 /* XCRemoteSwiftPackageReference "ios-maps-sdk" */;
+			productName = GoogleMaps;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 7555FF73242A565900829871 /* Project object */;
 }

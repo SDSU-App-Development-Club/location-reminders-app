@@ -1,4 +1,5 @@
 
+import android.content.SharedPreferences
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.fadeIn
@@ -7,6 +8,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowColumnScopeInstance.align
+import androidx.compose.foundation.layout.FlowRowScopeInstance.align
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -37,25 +40,32 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.google.android.libraries.places.api.net.PlacesClient
 import swifties.testapp.R
 
 @Composable
-fun DashboardScreen() {
+fun DashboardScreen(prefs: SharedPreferences, placesClient: PlacesClient, navController: NavController) {
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
         GradientImageView(resourceId = R.drawable.dashboard_page)
-        ScheduleScreen()
+        ScheduleScreen(prefs, placesClient, navController)
     }
 }
 
 @Composable
-fun ScheduleScreen() {
+fun ScheduleScreen(
+    prefs: SharedPreferences,
+    placesClient: PlacesClient,
+    navController: NavController
+) {
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
         var showPopup by remember { mutableStateOf(false) }
 
+        // "Today" header and list
         AnimatedVisibility(
             visible = !showPopup,
             enter = fadeIn(),
@@ -131,7 +141,7 @@ fun ScheduleScreen() {
 
                     )
 
-                    CreateAlertScreen()
+                    CreateAlertScreen(prefs, placesClient, navController)
                 }
                 FloatingActionButton(
                     onClick = {
@@ -143,6 +153,7 @@ fun ScheduleScreen() {
                     shape = CircleShape,
                     modifier = Modifier
                         .size(64.dp)
+                        .align(Alignment.End)
                         .border(6.dp, Color.White, CircleShape),
                 ) {
                     Icon(Icons.Default.Add, contentDescription = "Add Task")
