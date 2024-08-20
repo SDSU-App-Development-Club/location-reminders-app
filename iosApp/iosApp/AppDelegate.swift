@@ -15,11 +15,12 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         
-        GMSServices.provideAPIKey("AIzaSyD03IWaMTOrmnwfFzXptGz2Rhrl2NoQ4XM")
-        //GMSPlacesClient.provideAPIKey("AIzaSyD03IWaMTOrmnwfFzXptGz2Rhrl2NoQ4XM")
+        GMSServices.provideAPIKey("API_KEY")
+        //GMSPlacesClient.provideAPIKey("API_KEY")
         
         return true
     }
+    
     
     //YOU CAN ADD OTHER UIApplicationDelegate here
     
